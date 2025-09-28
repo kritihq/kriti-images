@@ -1,0 +1,159 @@
+/* Documentation-style CSS with Yellow Theme */
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fefefe;
+    color: #2c2c2c;
+    line-height: 1.6;
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    flex: 1;
+}
+
+/* Table of Contents Sidebar */
+.toc-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    color: #1a1a1a;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f1c40f;
+}
+
+.toc-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.toc-nav a {
+    display: block;
+    padding: 4px 8px;
+    color: #555555;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.toc-nav a:hover {
+    background-color: #fffef8;
+    color: #f39c12;
+    text-decoration: none;
+}
+
+.toc-nav a.active {
+    background-color: #f1c40f;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+h1 {
+    color: #1a1a1a;
+    text-align: left;
+    margin-bottom: 60px;
+    font-size: 2.8rem;
+    font-weight: 700;
+    border-bottom: 3px solid #f1c40f;
+    padding-bottom: 20px;
+}
+
+.transformation-section {
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    margin-bottom: 40px;
+    padding: 30px;
+}
+
+.transformation-title {
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    border-left: 4px solid #f1c40f;
+    padding-left: 16px;
+}
+
+.transformation-section p {
+    color: #555555;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-size: 1rem;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #f8f8f8;
+}
+
+.tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #666666;
+    font-size: 1rem;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+}
+
+.tab:hover {
+    color: #f39c12;
+    background-color: #fffef8;
+}
+
+.tab.active {
+    color: #f39c12;
+    border-bottom-color: #f1c40f;
+    background-color: #fffef8;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.image-container {
+    text-align: center;
+    padding: 24px;
+    background: #fafafa;
+    border: 1px solid #e8e8e8;
+}
+
+.demo-image {
+    max-width: 100%;
+    max-height: 400px;
+    border: 1px solid #dddddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .transformation-section {
+        padding: 20px;
+    }
+
+    .tab {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}

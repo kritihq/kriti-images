@@ -1,0 +1,3472 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Image Transformations Demo</title>
+        <link rel="stylesheet" href="/static/css/demo.css" />
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    </head>
+    <body>
+        <main>
+            <aside class="toc-sidebar">
+                <h3>Table of Contents</h3>
+                <nav class="toc-nav">
+                    <ul>
+                        <li><a href="#tr-brightness">Brightness</a></li>
+                        <li><a href="#tr-contrast">Contrast</a></li>
+                        <li><a href="#tr-flip">Flip</a></li>
+                        <li><a href="#tr-blur">Blur</a></li>
+                        <li><a href="#tr-gamma">Gamma</a></li>
+                        <li><a href="#tr-rotate">Rotate</a></li>
+                        <li><a href="#tr-saturation">Saturation</a></li>
+                        <li><a href="#tr-sharpen">Sharpen</a></li>
+                        <li><a href="#tr-width">Width</a></li>
+                        <li><a href="#tr-height">Height</a></li>
+                        <li><a href="#tr-background">Background Color</a></li>
+                        <li><a href="#tr-fit">Fit</a></li>
+                        <li><a href="#tr-format">Format</a></li>
+                        <li><a href="#tr-quality">Quality</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <article>
+                <h1>Image Transformations Demo</h1>
+
+                <!-- Brightness Section -->
+                <section class="transformation-section" id="tr-brightness">
+                    <h2 class="transformation-title">Brightness</h2>
+                    <p>
+                        Brightness transformation shifts all pixel values
+                        equally, making the entire image lighter or darker.
+                        Unlike gamma correction, brightness affects all tones
+                        uniformly.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> -100 to 100</li>
+                        <li><strong>Default:</strong> 0 (no change)</li>
+                        <li>
+                            <strong>Negative values:</strong> Make image darker
+                        </li>
+                        <li>
+                            <strong>Positive values:</strong> Make image
+                            brighter
+                        </li>
+                        <li>
+                            <strong>Extreme values:</strong> -100 = completely
+                            black, +100 = completely white
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'brightness-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'brightness-negative')"
+                        >
+                            Brightness -40
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'brightness-positive')"
+                        >
+                            Brightness +40
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="brightness-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (brightness=0)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="brightness-negative" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:brightness=-40/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:brightness=-40/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:brightness=-40/image1.jpg"
+                                alt="Brightness -40"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Darkened image - all pixels shifted down by 40
+                                units (brightness=-40)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="brightness-positive" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:brightness=40/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:brightness=40/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:brightness=40/image1.jpg"
+                                alt="Brightness +40"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Brightened image - all pixels shifted up by 40
+                                units (brightness=+40)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contrast Section -->
+                <section class="transformation-section" id="tr-contrast">
+                    <h2 class="transformation-title">Contrast</h2>
+                    <p>
+                        Contrast transformation adjusts the difference between
+                        light and dark areas, making lights lighter and darks
+                        darker (or vice versa). Unlike brightness, contrast
+                        affects the tonal range and separation between colors.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> -100 to 100</li>
+                        <li><strong>Default:</strong> 0 (no change)</li>
+                        <li>
+                            <strong>Negative values:</strong> Reduce contrast,
+                            flatten tonal range
+                        </li>
+                        <li>
+                            <strong>Positive values:</strong> Increase contrast,
+                            expand tonal range
+                        </li>
+                        <li>
+                            <strong>Extreme values:</strong> -100 = flat gray,
+                            +100 = maximum contrast
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'contrast-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'contrast-negative')"
+                        >
+                            Contrast -40
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'contrast-positive')"
+                        >
+                            Contrast +50
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="contrast-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (contrast=0)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="contrast-negative" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:contrast=-40/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:contrast=-40/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:contrast=-40/image1.jpg"
+                                alt="Contrast -40"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Reduced contrast - flattened tonal range, more
+                                washed out appearance (contrast=-40)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="contrast-positive" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:contrast=50/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:contrast=50/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:contrast=50/image1.jpg"
+                                alt="Contrast +50"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Enhanced contrast - expanded tonal range, more
+                                dramatic difference between lights and darks
+                                (contrast=+50)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Flip Section -->
+                <section class="transformation-section" id="tr-flip">
+                    <h2 class="transformation-title">Flip</h2>
+                    <p>
+                        Flip transformation mirrors the image along horizontal,
+                        vertical, or both axes. This is a lossless
+                        transformation that simply reorders pixels without
+                        quality loss.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li>
+                            <strong>h:</strong> Horizontal flip (mirror
+                            left-right)
+                        </li>
+                        <li>
+                            <strong>v:</strong> Vertical flip (mirror
+                            top-bottom)
+                        </li>
+                        <li>
+                            <strong>hv or vh:</strong> Both horizontal and
+                            vertical flip (180° rotation)
+                        </li>
+                        <li>
+                            <strong>Quality:</strong> No quality loss - pixels
+                            are only repositioned
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'flip-original')"
+                        >
+                            Original
+                        </button>
+                        <button class="tab" onclick="showTab(event, 'flip-h')">
+                            Horizontal Flip
+                        </button>
+                        <button class="tab" onclick="showTab(event, 'flip-v')">
+                            Vertical Flip
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="flip-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (no flip)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="flip-h" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:flip=h/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:flip=h/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:flip=h/image1.jpg"
+                                alt="Horizontal Flip"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Horizontally flipped image (flip=h)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="flip-v" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:flip=v/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:flip=v/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:flip=v/image1.jpg"
+                                alt="Vertical Flip"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Vertically flipped image (flip=v)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Blur Section -->
+                <section class="transformation-section" id="tr-blur">
+                    <h2 class="transformation-title">Blur</h2>
+                    <p>
+                        Blur transformation applies Gaussian blur to soften the
+                        image by reducing sharp transitions between pixels. This
+                        is commonly used for background effects or noise
+                        reduction.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> 1 to 250</li>
+                        <li><strong>Default:</strong> 1 (minimal blur)</li>
+                        <li>
+                            <strong>Low values (1-10):</strong> Subtle
+                            softening, noise reduction
+                        </li>
+                        <li>
+                            <strong>Medium values (11-50):</strong> Noticeable
+                            blur for artistic effects
+                        </li>
+                        <li>
+                            <strong>High values (51-250):</strong> Heavy blur
+                            for backgrounds or privacy
+                        </li>
+                        <li>
+                            <strong>Performance:</strong> Higher values require
+                            more processing time
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'blur-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'blur-light')"
+                        >
+                            Light Blur (3)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'blur-medium')"
+                        >
+                            Medium Blur (10)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'blur-heavy')"
+                        >
+                            Heavy Blur (25)
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="blur-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (no blur)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="blur-light" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:blur=3/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:blur=3/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:blur=3/image1.jpg"
+                                alt="Light Blur"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Lightly blurred image (blur=5)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="blur-medium" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:blur=10/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:blur=10/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:blur=10/image1.jpg"
+                                alt="Medium Blur"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Subtle blur - good for noise reduction while
+                                maintaining detail (blur=3)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="blur-medium" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:blur=10/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:blur=10/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:blur=10/image1.jpg"
+                                alt="Medium Blur"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Moderate blur - good for artistic effects and
+                                background softening (blur=10)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="blur-heavy" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:blur=25/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:blur=25/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:blur=25/image1.jpg"
+                                alt="Heavy Blur"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Heavy blur - ideal for privacy, backgrounds, or
+                                strong artistic effects (blur=25)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gamma Section -->
+                <section class="transformation-section" id="tr-gamma">
+                    <h2 class="transformation-title">Gamma</h2>
+                    <p>
+                        Gamma correction applies a non-linear curve that affects
+                        midtones more than highlights and shadows. Unlike
+                        brightness, gamma preserves pure black and white while
+                        adjusting the middle gray values.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> 0.1 to 2.0</li>
+                        <li><strong>Default:</strong> 1.0 (no change)</li>
+                        <li>
+                            <strong>Values < 1.0 (0.1-0.9):</strong> Brighten
+                            midtones, lift shadows
+                        </li>
+                        <li>
+                            <strong>Values > 1.0 (1.1-2.0):</strong> Darken
+                            midtones, deepen shadows
+                        </li>
+                        <li>
+                            <strong>Best for:</strong> Adjusting exposure
+                            without clipping highlights/shadows
+                        </li>
+                        <li>
+                            <strong>Common values:</strong> 0.5 (brighten), 1.8
+                            (darken)
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'gamma-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'gamma-bright')"
+                        >
+                            Bright (0.5)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'gamma-dark')"
+                        >
+                            Dark (1.8)
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="gamma-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (gamma=1.0)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="gamma-bright" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:gamma=0.5/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:gamma=0.5/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:gamma=0.5/image1.jpg"
+                                alt="Dark Gamma"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Brightened midtones - shadows lifted while
+                                preserving highlights (gamma=0.5)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="gamma-dark" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:gamma=1.5/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:gamma=1.8/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:gamma=1.8/image1.jpg"
+                                alt="Gamma 1.8"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Darkened midtones - shadows deepened while
+                                preserving highlights (gamma=1.8)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rotate Section -->
+                <section class="transformation-section" id="tr-rotate">
+                    <h2 class="transformation-title">Rotate</h2>
+                    <p>
+                        Rotate transformation rotates the image by a specified
+                        angle in degrees. Supports both numeric angles and
+                        convenient shortcuts for common rotations.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li>
+                            <strong>Numeric values:</strong> Any angle in
+                            degrees (0-360)
+                        </li>
+                        <li>
+                            <strong>Shortcuts:</strong> 90/cw/right, 180/flip,
+                            270/-90/ccw/left
+                        </li>
+                        <li>
+                            <strong>Quality:</strong> Best results with
+                            multiples of 90°
+                        </li>
+                        <li>
+                            <strong>Background:</strong> Transparent areas
+                            filled automatically
+                        </li>
+                        <li>
+                            <strong>Auto-normalize:</strong> Angles
+                            automatically adjusted to 0-360° range
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'rotate-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'rotate-90')"
+                        >
+                            90° Rotate
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'rotate-180')"
+                        >
+                            180° Rotate
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'rotate-270')"
+                        >
+                            270° Rotate
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'rotate-45')"
+                        >
+                            45° Custom
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="rotate-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (0° rotation)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="rotate-90" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:rotate=90/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:rotate=90/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:rotate=90/image1.jpg"
+                                alt="Rotated 90°"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                90° clockwise rotation - can also use "cw" or
+                                "right" as shortcuts
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="rotate-180" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:rotate=180/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:rotate=180/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:rotate=180/image1.jpg"
+                                alt="Rotated 180°"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                180° rotation (upside down) - can also use
+                                "flip" as shortcut
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="rotate-270" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:rotate=270/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:rotate=270/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:rotate=270/image1.jpg"
+                                alt="Rotated 270°"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                270° rotation (counter-clockwise) - can also use
+                                "ccw", "-90", or "left"
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="rotate-45" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:rotate=45/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:rotate=45/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:rotate=45/image1.jpg"
+                                alt="Rotated 45°"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                45° custom rotation - non-90° multiples may have
+                                slight quality reduction
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="rotate-180" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:rotate=180/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:rotate=180/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:rotate=180/image1.jpg"
+                                alt="180 Degree Rotation"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                180° rotation (rotate=180)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Saturation Section -->
+                <section class="transformation-section" id="tr-saturation">
+                    <h2 class="transformation-title">Saturation</h2>
+                    <p>
+                        Saturation transformation adjusts the intensity and
+                        vividness of colors in the image. This affects how
+                        vibrant colors appear without changing their hue or
+                        brightness.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> -100 to 500</li>
+                        <li><strong>Default:</strong> 0 (no change)</li>
+                        <li>
+                            <strong>-100:</strong> Complete grayscale (no color)
+                        </li>
+                        <li>
+                            <strong>Negative values (-99 to -1):</strong> Reduce
+                            color intensity, more muted
+                        </li>
+                        <li>
+                            <strong>Positive values (1-100):</strong> Increase
+                            color intensity, more vivid
+                        </li>
+                        <li>
+                            <strong>High values (101-500):</strong>
+                            Hyper-saturated colors for artistic effects
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'saturation-original')"
+                        >
+                            Original Image
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'saturation-grayscale')"
+                        >
+                            Grayscale (-100)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'saturation-enhanced')"
+                        >
+                            Enhanced (+60)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'saturation-hyper')"
+                        >
+                            Hyper (+150)
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="saturation-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (saturation=0)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="saturation-grayscale" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:saturation=-100/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:saturation=-100/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:saturation=-100/image1.jpg"
+                                alt="Grey Scale"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Grey Scale (saturation=-100)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="saturation-100" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:saturation=150/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:saturation=150/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:saturation=-100/image1.jpg"
+                                alt="Grayscale"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Complete grayscale - all color information
+                                removed (saturation=-100)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="saturation-enhanced" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:saturation=60/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:saturation=60/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:saturation=60/image1.jpg"
+                                alt="Enhanced Saturation"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Enhanced colors - more vibrant and vivid
+                                appearance (saturation=+60)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="saturation-hyper" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:saturation=150/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:saturation=150/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:saturation=150/image1.jpg"
+                                alt="Hyper Saturation"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Hyper-saturated colors - extreme vividness for
+                                artistic effects (saturation=+150)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sharpen Section -->
+                <section class="transformation-section" id="tr-sharpen">
+                    <h2 class="transformation-title">Sharpen</h2>
+                    <p>
+                        Sharpen transformation enhances edge definition and
+                        image clarity using unsharp masking. This technique
+                        increases contrast along edges to make images appear
+                        more crisp.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> 0.5 to 1.5</li>
+                        <li>
+                            <strong>Default:</strong> 0.5 (minimal sharpening)
+                        </li>
+                        <li>
+                            <strong>Low values (0.5-0.8):</strong> Subtle edge
+                            enhancement
+                        </li>
+                        <li>
+                            <strong>Medium values (0.9-1.2):</strong> Noticeable
+                            sharpening for photos
+                        </li>
+                        <li>
+                            <strong>High values (1.3-1.5):</strong> Strong
+                            sharpening, may introduce artifacts
+                        </li>
+                        <li>
+                            <strong>Best for:</strong> Slightly blurry or soft
+                            images
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'sharpen-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'sharpen-subtle')"
+                        >
+                            Subtle (0.8)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'sharpen-strong')"
+                        >
+                            Strong (1.3)
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="sharpen-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (no sharpening)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="sharpen-subtle" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:sharpen=0.8/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:sharpen=0.8/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:sharpen=0.8/image1.jpg"
+                                alt="Subtle Sharpen"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Subtle sharpening - gentle edge enhancement
+                                without artifacts (sharpen=0.8)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="sharpen-strong" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:sharpen=1.3/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:sharpen=1.3/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:sharpen=1.3/image1.jpg"
+                                alt="Strong Sharpen"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Strong sharpening - dramatic edge enhancement
+                                for very soft images (sharpen=1.3)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="sharpen-1.3" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:sharpen=1.3/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:sharpen=1.3/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:sharpen=1.3/image1.jpg"
+                                alt="Heavy Sharpen"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Heavily sharpened image (sharpen=1.3)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Width Section -->
+                <section class="transformation-section" id="tr-width">
+                    <h2 class="transformation-title">Width</h2>
+                    <p>
+                        Width transformation resizes the image to a specific
+                        width while automatically calculating height to maintain
+                        aspect ratio. This is useful for responsive design and
+                        consistent layouts.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> 1 to 10,000 pixels</li>
+                        <li>
+                            <strong>Aspect ratio:</strong> Automatically
+                            preserved
+                        </li>
+                        <li>
+                            <strong>Height:</strong> Calculated automatically
+                        </li>
+                        <li>
+                            <strong>Common uses:</strong> Responsive images,
+                            thumbnails
+                        </li>
+                        <li>
+                            <strong>Quality:</strong> Uses high-quality Lanczos
+                            resampling
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'width-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'width-300')"
+                        >
+                            Width 300px
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'width-150')"
+                        >
+                            Width 150px
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="width-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (original width)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="width-300" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=300/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=300/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=300/image1.jpg"
+                                alt="Width 300px"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Resized to 300px width (width=300)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="width-150" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=150/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=150/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=150/image1.jpg"
+                                alt="Width 150px"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Resized to 150px width (width=150)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Height Section -->
+                <section class="transformation-section" id="tr-height">
+                    <h2 class="transformation-title">Height</h2>
+                    <p>
+                        Height transformation resizes the image to a specific
+                        height while automatically calculating width to maintain
+                        aspect ratio. Perfect for vertical layouts and
+                        consistent image heights.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li><strong>Range:</strong> 1 to 10,000 pixels</li>
+                        <li>
+                            <strong>Aspect ratio:</strong> Automatically
+                            preserved
+                        </li>
+                        <li>
+                            <strong>Width:</strong> Calculated automatically
+                        </li>
+                        <li>
+                            <strong>Common uses:</strong> Card layouts,
+                            galleries
+                        </li>
+                        <li>
+                            <strong>Quality:</strong> Uses high-quality Lanczos
+                            resampling
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'height-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'height-200')"
+                        >
+                            Height 200px
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'height-100')"
+                        >
+                            Height 100px
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="height-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (original height)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="height-200" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:height=200/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:height=200/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:height=200/image1.jpg"
+                                alt="Height 200px"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Resized to 200px height (height=200)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="height-100" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:height=100/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:height=100/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:height=100/image1.jpg"
+                                alt="Height 100px"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Resized to 100px height (height=100)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Background Section -->
+                <section class="transformation-section" id="tr-background">
+                    <h2 class="transformation-title">Background</h2>
+                    <p>
+                        Background transformation sets a background color for
+                        transparent areas, padding operations, or rotation
+                        fills. Essential for maintaining visual consistency when
+                        transforming images.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li>
+                            <strong>Hex colors:</strong> #ff0000, #00ff00,
+                            #0000ff
+                        </li>
+                        <li>
+                            <strong>Named colors:</strong> red, green, blue,
+                            white, black
+                        </li>
+                        <li><strong>RGB format:</strong> rgb(255,0,0)</li>
+                        <li><strong>Special:</strong> transparent (default)</li>
+                        <li>
+                            <strong>Use cases:</strong> Padding, rotation fills,
+                            PNG transparency
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'background-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'background-red')"
+                        >
+                            Red Background
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'background-blue')"
+                        >
+                            Blue Background
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="background-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (transparent background)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="background-red" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=700,height=500,background=red/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=700,height=500,background=red/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=700,height=500,background=red/image1.jpg"
+                                alt="Red Background"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Red background (background=red)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="background-blue" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=700,height=500,background=blue/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=700,height=500,background=blue/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=700,height=500,background=blue/image1.jpg"
+                                alt="Blue Background"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Blue background (background=blue)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Fit Section -->
+                <section class="transformation-section" id="tr-fit">
+                    <h2 class="transformation-title">Fit</h2>
+                    <p>
+                        Fit transformation controls how images are resized to
+                        fit specified dimensions. Each mode handles aspect ratio
+                        preservation and sizing behavior differently:
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li>
+                            <strong>contain:</strong> Scales image to fit within
+                            bounds while preserving aspect ratio (like CSS
+                            object-fit: contain)
+                        </li>
+                        <li>
+                            <strong>cover:</strong> Scales image to fill entire
+                            area while preserving aspect ratio, may crop parts
+                            (like CSS object-fit: cover)
+                        </li>
+                        <li>
+                            <strong>crop:</strong> Smart crop - scales down if
+                            source is smaller than target, otherwise behaves
+                            like cover
+                        </li>
+                        <li>
+                            <strong>pad:</strong> Scales to fit within bounds,
+                            then adds padding with background color to reach
+                            exact dimensions
+                        </li>
+                        <li>
+                            <strong>squeeze:</strong> Scales to exact dimensions
+                            without preserving aspect ratio (may distort image)
+                        </li>
+                        <li>
+                            <strong>scaledown:</strong> Like contain, but only
+                            scales down - never enlarges images smaller than
+                            target dimensions
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'fit-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'fit-contain')"
+                        >
+                            Contain
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'fit-cover')"
+                        >
+                            Cover
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'fit-crop')"
+                        >
+                            Crop
+                        </button>
+                        <button class="tab" onclick="showTab(event, 'fit-pad')">
+                            Pad
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'fit-squeeze')"
+                        >
+                            Squeeze
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'fit-scaledown')"
+                        >
+                            Scale Down
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="fit-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image (no fit transformation)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="fit-contain" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=400,height=300,fit=contain/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=400,height=300,fit=contain/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=400,height=300,fit=contain/image1.jpg"
+                                alt="Fit Contain"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Scales image to fit completely within 400x300
+                                bounds while preserving aspect ratio. Image may
+                                be smaller than target dimensions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="fit-cover" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=400,height=300,fit=cover/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=400,height=300,fit=cover/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=400,height=300,fit=cover/image1.jpg"
+                                alt="Fit Cover"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Scales image to completely fill 400x300 area
+                                while preserving aspect ratio. Parts of image
+                                may be cropped.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="fit-crop" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=400,height=300,fit=crop/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=400,height=300,fit=crop/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=400,height=300,fit=crop/image1.jpg"
+                                alt="Fit Crop"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Smart crop: if source is smaller than 400x300,
+                                scales down proportionally; otherwise behaves
+                                like cover mode.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="fit-pad" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=400,height=300,background=blue,fit=pad/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=400,height=300,background=blue,fit=pad/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=400,height=300,background=blue,fit=pad/image1.jpg"
+                                alt="Fit Pad"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Scales to fit within bounds, then pads with
+                                background color to reach exact 400x300
+                                dimensions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="fit-squeeze" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=400,height=200,fit=squeeze/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=400,height=200,fit=squeeze/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=400,height=200,fit=squeeze/image1.jpg"
+                                alt="Fit Squeeze"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Forces image to exact 400x200 dimensions without
+                                preserving aspect ratio. May cause distortion.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="fit-scaledown" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:width=300,height=600,fit=scaledown/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:width=300,height=600,fit=scaledown/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:width=300,height=600,fit=scaledown/image1.jpg"
+                                alt="Fit Scale Down"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Like contain, but only scales DOWN. If original
+                                is smaller than 800x600, keeps original size
+                                unchanged.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Format Section -->
+                <section class="transformation-section" id="tr-format">
+                    <h2 class="transformation-title">Format</h2>
+                    <p>
+                        Format transformation converts images between different
+                        file formats. This allows you to change the output
+                        format of your processed image to optimize for different
+                        use cases.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li>
+                            <strong>jpeg/jpg:</strong> Best for photographs with
+                            many colors. Smaller file sizes but lossy
+                            compression. Good web performance.
+                        </li>
+                        <li>
+                            <strong>png:</strong> Best for images with
+                            transparency, screenshots, or graphics with few
+                            colors. Lossless compression but larger files.
+                        </li>
+                        <li>
+                            <strong>webp:</strong> Modern format with excellent
+                            compression. Smaller than JPEG with better quality.
+                            Supports transparency like PNG.
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'format-jpeg')"
+                        >
+                            JPEG
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'format-png')"
+                        >
+                            PNG
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'format-webp')"
+                        >
+                            WebP
+                        </button>
+                    </div>
+
+                    <!-- JPEG Tab Content -->
+                    <div id="format-jpeg" class="tab-content active">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:format=jpeg/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:format=jpeg/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:format=jpeg/image1.jpg"
+                                alt="Format JPEG"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Convert image to JPEG format with optimized
+                                compression for web use.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PNG Tab Content -->
+                    <div id="format-png" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:format=png/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:format=png/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:format=png/image1.jpg"
+                                alt="Format PNG"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Convert image to PNG format with lossless
+                                compression and transparency support.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- WebP Tab Content -->
+                    <div id="format-webp" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:format=webp/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:format=webp/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:format=webp/image1.jpg"
+                                alt="Format WEBP"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Convert image to WEBP format.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quality Section -->
+                <section class="transformation-section" id="tr-quality">
+                    <h2 class="transformation-title">Quality</h2>
+                    <p>
+                        For Lossy compressions i.e. JPEG & WebP, use this
+                        transformation which suggest the quality of image
+                        returned after encoding to the given
+                        <a href="#tr-format">format</a>. Values must be between,
+                        1 (lower quality) to 100 (higher quality, lossless for
+                        webp), both inclusive.
+                    </p>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'quality-original')"
+                        >
+                            Original (JPEG)
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'quality-1')"
+                        >
+                            Quality = 1
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'quality-75')"
+                        >
+                            Quality = 75
+                        </button>
+                    </div>
+
+                    <!-- Original image Tab contents -->
+                    <div id="quality-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Quality 1 Tab Content -->
+                    <div id="quality-1" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:quality=1/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:quality=1/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:quality=1/image1.jpg"
+                                alt="Quality 1%"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Quality = 1%
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Quality 75 Tab Content -->
+                    <div id="quality-75" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:quality=75/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:quality=75/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:quality=75/image1.jpg"
+                                alt="Quality 75%"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Quality = 75%
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Credit where its due -->
+                <small>
+                    <a
+                        href="https://www.pexels.com/photo/cat-laying-on-a-parking-21790602/"
+                    >
+                        Image credits
+                    </a>
+                </small>
+            </article>
+        </main>
+        <script src="/static/js/demo.js"></script>
+    </body>
+</html>
