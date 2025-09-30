@@ -1,0 +1,51 @@
+name: Test and Build
+
+on:
+  push:
+    branches: [main]
+
+env:
+  GO_VERSION: "1.24"
+  CGO_ENABLED: "1"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run tests
+        run: go test -v ./...
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build for ${{ matrix.arch }}
+        env:
+          CGO_ENABLED: ${{ env.CGO_ENABLED }}
+        run: |
+          GOOS=linux GOARCH=${{ matrix.arch }} go build -v -o bin/kriti-images-${{ matrix.arch }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kriti-images-${{ matrix.arch }}
+          path: bin/kriti-images-${{ matrix.arch }}
