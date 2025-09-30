@@ -10,11 +10,10 @@ import (
 	"strings"
 )
 
-// TODO: convert to application configs
-const (
-	MaxImageDimension = 8192             // 8K max
-	MaxImageFileSize  = 50 * 1024 * 1024 // 50MB
-)
+type SourceImageValidations struct {
+	MaxImageDimension  int
+	MaxFileSizeInBytes int64
+}
 
 // ImageSource represents an source to retrieve images from.
 type ImageSource interface {
@@ -31,6 +30,7 @@ type ImageSource interface {
 
 // ImageSourceLocal represents the machine's local disk as an image source.
 type ImageSourceLocal struct {
+	SourceImageValidations
 	BasePath string // base path of the mounted disk
 }
 
@@ -55,7 +55,7 @@ func (i *ImageSourceLocal) GetImage(fileName string) (image.Image, string, error
 	defer file.Close()
 
 	fileStat, _ := file.Stat()
-	if err := validateImageSize(fileStat.Size()); err != nil {
+	if err := validateImageSize(fileStat.Size(), i.MaxFileSizeInBytes); err != nil {
 		return nil, "", err
 	}
 
@@ -64,7 +64,7 @@ func (i *ImageSourceLocal) GetImage(fileName string) (image.Image, string, error
 		return nil, "", fmt.Errorf("failed to decode image: %w", err)
 	}
 
-	if err := validateImageDimensions(img.Bounds().Dx(), img.Bounds().Dy()); err != nil {
+	if err := validateImageDimensions(img.Bounds().Dx(), img.Bounds().Dy(), i.MaxImageDimension); err != nil {
 		return nil, "", err
 	}
 
@@ -76,17 +76,17 @@ func (i *ImageSourceLocal) GetImage(fileName string) (image.Image, string, error
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // validateImageDimensions returns error if the image dimensions exceed max allowed dimensions
-func validateImageDimensions(width, height int) error {
-	if width > MaxImageDimension || height > MaxImageDimension {
-		return fmt.Errorf("image dimensions too large: max allowed is %dx%d", MaxImageDimension, MaxImageDimension)
+func validateImageDimensions(width, height, max int) error {
+	if width > max || height > max {
+		return fmt.Errorf("image dimensions too large: max allowed is %dx%d", max, max)
 	}
 	return nil
 }
 
 // validateImageSize returns error if size of the image file is more than max allowed file size
-func validateImageSize(fileSize int64) error {
-	if fileSize > MaxImageFileSize {
-		return fmt.Errorf("image file too large: max allowed is %d bytes", MaxImageFileSize)
+func validateImageSize(fileSize, max int64) error {
+	if fileSize > max {
+		return fmt.Errorf("image file too large: max allowed is %d bytes", max)
 	}
 	return nil
 }

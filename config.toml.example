@@ -1,0 +1,14 @@
+[server]
+port = 8080
+enable_print_routes = false
+read_timeout = "30s"
+write_timeout = "30s"
+
+[images]
+base_path = "web/static/assets"
+max_image_dimension = 8192
+max_file_size_in_bytes= 52428800
+
+[limiter]
+max = 100
+expiration = "1m"

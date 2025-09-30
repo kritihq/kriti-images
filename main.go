@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -16,30 +15,37 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/template/html/v2"
 
+	"github.com/kritihq/kriti-images/internal/config"
 	"github.com/kritihq/kriti-images/internal/imagesources"
 	"github.com/kritihq/kriti-images/internal/server/routes"
 )
 
-// TODO: convert to application configs
-const (
-	Port           = 8080
-	ImagesBasePath = "web/static/assets"
-)
-
 func main() {
+	cfg, err := config.LoadConfig(".")
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+
 	server := fiber.New(fiber.Config{
-		EnablePrintRoutes:     false, // toggle only for debugging
-		GETOnly:               false,
+		AppName:               "Kriti Images",
+		EnablePrintRoutes:     cfg.Server.EnablePrintRoutes,
 		DisableStartupMessage: true,
-		ReadTimeout:           30 * time.Second,
-		WriteTimeout:          30 * time.Second,
+		ReadTimeout:           cfg.Server.ReadTimeout,
+		WriteTimeout:          cfg.Server.WriteTimeout,
 		Views:                 html.New("./web/templates", ".html"),
 	})
 
-	src := imagesources.ImageSourceLocal{BasePath: ImagesBasePath}
+	src := imagesources.ImageSourceLocal{
+		BasePath: cfg.Images.BasePath,
+		SourceImageValidations: imagesources.SourceImageValidations{
+			MaxImageDimension:  cfg.Images.MaxImageDimension,
+			MaxFileSizeInBytes: cfg.Images.MaxImageSizeInBytes,
+		},
+	}
+
 	server.Use(limiter.New(limiter.Config{
-		Max:               100,
-		Expiration:        1 * time.Minute,
+		Max:               cfg.Limiter.Max,
+		Expiration:        cfg.Limiter.Expiration,
 		LimiterMiddleware: limiter.SlidingWindow{},
 		Next: func(c *fiber.Ctx) bool {
 			return c.IP() == "127.0.0.1" // for testing; skip rate limiter when localhost
@@ -62,16 +68,16 @@ func main() {
 	log.Info("registering routes")
 	routes.BindRoutesBase(server, &src)
 
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", Port))
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Server.Port))
 	if err != nil {
-		panic(err)
+		log.Panicw("failed to start listener on port", "port", cfg.Server.Port, "error", err)
 	}
 
-	_ = listener.Addr().(*net.TCPAddr).Port
-	_ = listener.Close() // TODO: handle error
+	port := listener.Addr().(*net.TCPAddr).Port // user can use "0" to start on random port
+	defer listener.Close()
 
-	log.Infow("starting server", "port", Port)
-	if err := server.Listen(fmt.Sprintf(":%d", Port)); err != nil {
+	log.Infow("starting server", "port", port)
+	if err := server.Listener(listener); err != nil {
 		log.Errorw("failed to start server", "error", err.Error())
 	}
 }

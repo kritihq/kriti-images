@@ -93,16 +93,23 @@ go build -o kriti-images main.go
 
 ## 🔧 Configuration
 
-Current configuration is code-based (will be moved to config files):
+The service uses external configuration files with the [Viper](https://github.com/spf13/viper) library. Configuration can be provided in YAML or TOML format.
 
-```go
-const (
-    Port           = 8080                    // Server port
-    ImagesBasePath = "web/static/assets"     // Image source directory
-    MaxImageDimension = 8192                 // Max width/height (8K)
-    MaxImageFileSize  = 50 * 1024 * 1024    // Max file size (50MB)
-)
-```
+### Configuration Files
+
+Create a `config.yaml` or `config.toml` file in the project root.
+
+### Configuration Options
+
+- **server.port** - Server port (default: 8080)
+- **server.enable_print_routes** - Enable route debugging (default: false)
+- **server.read_timeout** - Request read timeout (default: 30s)
+- **server.write_timeout** - Response write timeout (default: 30s)
+- **images.base_path** - Image source directory (default: "web/static/assets")
+- **images.max_image_dimension** - Maximum image dimension, any source image beyond will not be processed (default: 8192 (8K))
+- **images.max_file_size_in_bytes** - Maximum image file size, any source image beyond will not be processed (default: 52428800 (50MB))
+- **limiter.max** - Rate limit per minute (default: 100)
+- **limiter.expiration** - Rate limit window (default: 1m)
 
 ## 🌐 API Reference
 
