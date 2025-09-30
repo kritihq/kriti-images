@@ -28,7 +28,7 @@ jobs:
     needs: test
     strategy:
       matrix:
-        arch: [amd64, arm64]
+        arch: [amd64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
