@@ -1,0 +1,49 @@
+[Unit]
+Description=Kriti Images - High-performance image transformation service
+Documentation=https://github.com/kritihq/kriti-images
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=kriti-images
+Group=kriti-images
+WorkingDirectory=/opt/kriti-images
+ExecStart=/opt/kriti-images/kriti-images
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Security settings
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/kriti-images/web/static/assets /var/log/kriti-images
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Environment
+Environment=GIN_MODE=release
+EnvironmentFile=-/etc/kriti-images/environment
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=kriti-images
+
+[Install]
+WantedBy=multi-user.target
