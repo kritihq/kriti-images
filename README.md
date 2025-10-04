@@ -91,6 +91,10 @@ go build -o kriti-images main.go
 ./kriti-images
 ```
 
+### Docker
+
+Check out [Docker README](docker/README.md) for details.
+
 ## 🔧 Configuration
 
 The service uses external configuration files with the [Viper](https://github.com/spf13/viper) library. Configuration can be provided in YAML or TOML format.
