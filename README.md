@@ -53,6 +53,9 @@ GET /cgi/images/tr:blur=10,rotate=45,background=white/image1.jpg
 - `rotate` - Rotate image (0-360° or shortcuts: `90`, `cw`, `180`, `270`, `ccw`)
 - `flip` - Flip image (`h` for horizontal, `v` for vertical, `hv` for both)
 
+### Visual Effects
+- `radius` - Border radius for rounded corners (pixels: `10`, `20px` or percentage: `15%`, `25%`)
+
 ### Format & Quality
 - `format` - Output format (`jpeg`, `png`, `webp`)
 - `quality` - JPEG/WebP quality (1-100, higher = better quality)

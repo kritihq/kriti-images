@@ -229,3 +229,38 @@ func parseFormatValue(value string) (string, error) {
 		return "", fmt.Errorf("unsupported format: %s (supported formats: jpeg, jpg, png, webp)", value)
 	}
 }
+
+// BorderRadiusValue represents a border radius value that can be in pixels or percentage
+type BorderRadiusValue struct {
+	Value     float32
+	IsPercent bool
+}
+
+// parseBorderRadiusValue parses border radius values like "10", "20px", "15%"
+func parseBorderRadiusValue(value string) (*BorderRadiusValue, error) {
+	if value == "" {
+		return nil, fmt.Errorf("border radius value cannot be empty")
+	}
+
+	var radiusValue BorderRadiusValue
+
+	if strings.HasSuffix(value, "%") {
+		// Percentage value
+		percentStr := strings.TrimSuffix(value, "%")
+		parsed, parseErr := strconv.ParseFloat(percentStr, 32)
+		if parseErr != nil || parsed < 0 || parsed > 50 {
+			return nil, fmt.Errorf("percentage value must be between 0%% and 50%%, got %s%%", percentStr)
+		}
+		radiusValue = BorderRadiusValue{Value: float32(parsed), IsPercent: true}
+	} else {
+		// Pixel value (with or without "px" suffix)
+		pixelStr := strings.TrimSuffix(value, "px")
+		parsed, parseErr := strconv.ParseFloat(pixelStr, 32)
+		if parseErr != nil || parsed < 0 {
+			return nil, fmt.Errorf("pixel value must be a positive number, got %s", value)
+		}
+		radiusValue = BorderRadiusValue{Value: float32(parsed), IsPercent: false}
+	}
+
+	return &radiusValue, fmt.Errorf("unexpected number of radius values")
+}

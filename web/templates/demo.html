@@ -19,6 +19,7 @@
                         <li><a href="#tr-blur">Blur</a></li>
                         <li><a href="#tr-gamma">Gamma</a></li>
                         <li><a href="#tr-rotate">Rotate</a></li>
+                        <li><a href="#tr-radius">Border Radius</a></li>
                         <li><a href="#tr-saturation">Saturation</a></li>
                         <li><a href="#tr-sharpen">Sharpen</a></li>
                         <li><a href="#tr-width">Width</a></li>
@@ -1470,6 +1471,200 @@
                                 "
                             >
                                 180° rotation (rotate=180)
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Border Radius Section -->
+                <section class="transformation-section" id="tr-radius">
+                    <h2 class="transformation-title">Border Radius</h2>
+                    <p>
+                        Border radius transformation applies rounded corners to
+                        images, similar to the CSS border-radius property.
+                        Supports both pixel and percentage values for flexible
+                        corner rounding.
+                    </p>
+                    <ul
+                        style="
+                            margin: 15px 0;
+                            padding-left: 25px;
+                            line-height: 1.6;
+                        "
+                    >
+                        <li>
+                            <strong>Pixel values:</strong> Fixed radius in
+                            pixels (e.g., 10, 20px)
+                        </li>
+                        <li>
+                            <strong>Percentage values:</strong> Responsive
+                            radius based on image size (e.g., 15%, 25%)
+                        </li>
+                        <li>
+                            <strong>Multiple values:</strong> CSS-style syntax
+                            for different corners
+                        </li>
+                        <li>
+                            <strong>Anti-aliasing:</strong> Smooth edges for
+                            professional results
+                        </li>
+                        <li>
+                            <strong>Transparency:</strong> Areas outside radius
+                            become transparent
+                        </li>
+                    </ul>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button
+                            class="tab active"
+                            onclick="showTab(event, 'radius-original')"
+                        >
+                            Original
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'radius-pixel')"
+                        >
+                            20px Radius
+                        </button>
+                        <button
+                            class="tab"
+                            onclick="showTab(event, 'radius-percent')"
+                        >
+                            15% Radius
+                        </button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div id="radius-original" class="tab-content active">
+                        <div class="image-container">
+                            <img
+                                src="/cgi/images/tr:quality=100/image1.jpg"
+                                alt="Original Image"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                Original image with sharp corners
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="radius-pixel" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:br-radius=20/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:br-radius=20/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:br-radius=20/image1.jpg"
+                                alt="20px Border Radius"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                20 pixel border radius applied to all corners
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="radius-percent" class="tab-content">
+                        <div class="image-container">
+                            <div
+                                style="text-align: center; margin-bottom: 15px"
+                            >
+                                <a
+                                    href="/cgi/images/tr:br-radius=15%/image1.jpg"
+                                    target="_blank"
+                                    style="
+                                        padding: 8px 16px;
+                                        border-radius: 4px;
+                                        text-decoration: none;
+                                        font-family: monospace;
+                                        font-size: 14px;
+                                        display: inline-block;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 12px;
+                                    "
+                                >
+                                    /cgi/images/tr:br-radius=15%/image1.jpg
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="lucide lucide-arrow-up-right-icon lucide-arrow-up-right"
+                                    >
+                                        <path d="M7 7h10v10" />
+                                        <path d="M7 17 17 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <img
+                                src="/cgi/images/tr:br-radius=15%/image1.jpg"
+                                alt="15% Border Radius"
+                                class="demo-image"
+                            />
+                            <p
+                                style="
+                                    margin-top: 15px;
+                                    color: #666;
+                                    font-style: italic;
+                                "
+                            >
+                                15% border radius - responsive to image
+                                dimensions
                             </p>
                         </div>
                     </div>

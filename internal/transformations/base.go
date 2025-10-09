@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 )
 
+// Supported transformations
 type TransformationOption int
 
 const (
@@ -28,6 +29,7 @@ const (
 	Height
 	Format
 	Quality
+	BorderRadius
 )
 
 type DestinationImage struct {
@@ -138,6 +140,8 @@ func processOption(optStr string) (TransformationOption, string, error) {
 		return Format, value, nil
 	case "quality":
 		return Quality, value, nil
+	case "radius":
+		return BorderRadius, value, nil
 	default:
 		return -1, "", fmt.Errorf("unknown option: %s", key)
 	}
@@ -204,6 +208,14 @@ func createFilters(transformationsAndValues map[TransformationOption]string, des
 		case Sharpen:
 			strength := parseFloatValue(values, 0.5, 1.5, 0.5)
 			filters = append(filters, gift.UnsharpMask(1.0, strength, 0.0))
+		case BorderRadius:
+			radiusFilter, err := createBorderRadiusFilter(values)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create border radius filter: %w", err)
+			}
+			if radiusFilter != nil {
+				filters = append(filters, radiusFilter)
+			}
 		default:
 			log.Warnf("unkonwn transformation option: %v", t)
 		}
