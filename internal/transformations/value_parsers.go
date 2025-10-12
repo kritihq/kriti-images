@@ -262,5 +262,5 @@ func parseBorderRadiusValue(value string) (*BorderRadiusValue, error) {
 		radiusValue = BorderRadiusValue{Value: float32(parsed), IsPercent: false}
 	}
 
-	return &radiusValue, fmt.Errorf("unexpected number of radius values")
+	return &radiusValue, nil
 }

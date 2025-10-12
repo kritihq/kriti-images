@@ -1,28 +1,26 @@
 package transformations
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
 	"math"
-	"strings"
 
 	"github.com/disintegration/gift"
 )
 
 // createBorderRadiusFilter creates a filter that applies rounded corners to an image
 func createBorderRadiusFilter(value string) (gift.Filter, error) {
-	var radii *BorderRadiusValue
-	if strings.HasSuffix(value, "%") {
-		// Percentage value
-		percentStr := strings.TrimSuffix(value, "%")
-		radiusVal := parseFloatValue(percentStr, 0, 100, 50)
-		radii = &BorderRadiusValue{Value: radiusVal, IsPercent: true}
-	} else {
-		// Pixel value (with or without "px" suffix)
-		pixelStr := strings.TrimSuffix(value, "px")
-		radiusVal := parseFloatValue(pixelStr, 1, 8*1024*1024, 1) // 8K max-value; thats max supported image dimension
-		radii = &BorderRadiusValue{Value: float32(radiusVal), IsPercent: false}
+	// Validate that value is not empty
+	if value == "" {
+		return nil, fmt.Errorf("border radius value cannot be empty")
+	}
+
+	// Parse the border radius value with proper validation
+	radii, err := parseBorderRadiusValue(value)
+	if err != nil {
+		return nil, err
 	}
 
 	return &borderRadiusFilter{

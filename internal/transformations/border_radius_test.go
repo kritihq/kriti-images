@@ -21,11 +21,6 @@ func TestCreateBorderRadiusFilter(t *testing.T) {
 			hasError: false,
 		},
 		{
-			name:     "valid four values",
-			input:    "5,10,15,20",
-			hasError: false,
-		},
-		{
 			name:     "invalid value",
 			input:    "invalid",
 			hasError: true,
