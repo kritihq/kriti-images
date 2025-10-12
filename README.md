@@ -63,7 +63,7 @@ GET /cgi/images/tr:blur=10,rotate=45,background=white/image1.jpg
 
 ## 🔧 Upload Images
 
-> **Note**: This functionality is still experimental and _could be removed_ in future updates. It is disabled by default and must be enabled using configs.
+> **Note**: This functionality is still experimental and _could be removed or moved (api route)_ in future updates. It is disabled by default and must be enabled using configs.
 
 ### Enabling Upload APIs
 
@@ -81,7 +81,7 @@ enable_upload_api = true
 
 ### New Image
 
-**Endpoint:** `POST /images`
+**Endpoint:** `POST /api/v0/images`
 
 **Content-Type:** `multipart/form-data`
 
@@ -96,14 +96,14 @@ enable_upload_api = true
 
 **Example using cURL:**
 ```bash
-curl -X POST http://localhost:8080/images \
+curl -X POST http://localhost:8080/api/v0/images \
   -F "image=@/path/to/your/image.jpg" \
   -F "filename=my-custom-name.jpg"
 ```
 
 ### Update Existing Image
 
-**Endpoint:** `PUT /images`
+**Endpoint:** `PUT /api/v0/images`
 
 **Content-Type:** `multipart/form-data`
 
@@ -113,7 +113,7 @@ curl -X POST http://localhost:8080/images \
 
 **Example using cURL:**
 ```bash
-curl -X PUT http://localhost:8080/images \
+curl -X PUT http://localhost:8080/api/v0/images \
   -F "image=@/path/to/your/new-image.jpg" \
   -F "filename=existing-image.jpg"
 ```
@@ -174,7 +174,9 @@ Create a `config.yaml` or `config.toml` file in the project root.
 - **images.max_file_size_in_bytes** - Maximum image file size, any source image beyond will not be processed (default: 52428800 (50MB))
 - **limiter.max** - Rate limit per minute (default: 100)
 - **limiter.expiration** - Rate limit window (default: 1m)
-- **experimental.enable_upload_api** - Enable/disable upload APIs (POST/PUT /images) (default: false)
+- **experimental.enable_upload_api** - Enable/disable upload APIs (POST/PUT /api/v0/images) (default: false)
+
+> configs under `experimental` are temporary and so are the features they relate to. These configs & and the related features could be removed/moved in future releases
 
 ## 🌐 API Reference
 
