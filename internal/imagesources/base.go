@@ -5,9 +5,13 @@ package imagesources
 import (
 	"fmt"
 	"image"
+	"image/jpeg"
+	"image/png"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/chai2010/webp"
 )
 
 type SourceImageValidations struct {
@@ -24,6 +28,14 @@ type ImageSource interface {
 	// In case of any error or no image found, `error` is returned and other
 	// return values are null and empty.
 	GetImage(fileName string) (image.Image, string, error)
+
+	// UploadImage uploads the image with name `fileName` to the source.
+	// If the image is present it is returned as `image.Image` along with its
+	// format i.e. extension (JPEG, PNG or WEBP).
+	//
+	// In case of any error or no image found, `error` is returned and other
+	// return values are null and empty.
+	UploadImage(fileName string, file image.Image) error
 }
 
 // TODO: add other S3 compatible sources
@@ -69,6 +81,66 @@ func (i *ImageSourceLocal) GetImage(fileName string) (image.Image, string, error
 	}
 
 	return img, format, nil
+}
+
+func (i *ImageSourceLocal) UploadImage(fileName string, file image.Image) error {
+	// Ensure the path is safe and doesn't contain directory traversal
+	cleanPath := filepath.Clean(fileName)
+	if filepath.IsAbs(cleanPath) || strings.Contains(cleanPath, "..") {
+		return fmt.Errorf("invalid image path")
+	}
+
+	// Validate image dimensions
+	if err := validateImageDimensions(file.Bounds().Dx(), file.Bounds().Dy(), i.MaxImageDimension); err != nil {
+		return err
+	}
+
+	// Ensure the directory exists
+	fullPath := filepath.Join(i.BasePath, cleanPath)
+	dir := filepath.Dir(fullPath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("failed to create directory: %w", err)
+	}
+
+	// Create the file
+	outFile, err := os.Create(fullPath)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %w", err)
+	}
+	defer outFile.Close()
+
+	// Determine format from file extension
+	ext := strings.ToLower(filepath.Ext(fileName))
+	switch ext {
+	case ".jpg", ".jpeg":
+		if err := jpeg.Encode(outFile, file, &jpeg.Options{Quality: 85}); err != nil {
+			return fmt.Errorf("failed to encode JPEG: %w", err)
+		}
+	case ".png":
+		if err := png.Encode(outFile, file); err != nil {
+			return fmt.Errorf("failed to encode PNG: %w", err)
+		}
+	case ".webp":
+		if err := webp.Encode(outFile, file, &webp.Options{Quality: 85}); err != nil {
+			return fmt.Errorf("failed to encode WebP: %w", err)
+		}
+	default:
+		return fmt.Errorf("unsupported image format: %s", ext)
+	}
+
+	// Validate file size after encoding
+	fileInfo, err := outFile.Stat()
+	if err != nil {
+		return fmt.Errorf("failed to get file info: %w", err)
+	}
+
+	if err := validateImageSize(fileInfo.Size(), i.MaxFileSizeInBytes); err != nil {
+		// Remove the file if it exceeds size limit
+		os.Remove(fullPath)
+		return err
+	}
+
+	return nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

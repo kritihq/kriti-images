@@ -61,6 +61,47 @@ GET /cgi/images/tr:blur=10,rotate=45,background=white/image1.jpg
 - `quality` - JPEG/WebP quality (1-100, higher = better quality)
 - `background` - Background color (hex: `#ff0000`, named: `red`, rgb: `rgb(255,0,0)`)
 
+## Upload images
+
+### New Image
+
+**Endpoint:** `POST /images`
+
+**Content-Type:** `multipart/form-data`
+
+**Parameters:**
+- `image` (required): The image file to upload
+- `filename` (optional): Custom filename for the uploaded image. If not provided, uses the original filename.
+
+**Supported Formats:**
+- JPEG (`.jpg`, `.jpeg`)
+- PNG (`.png`)
+- WebP (`.webp`)
+
+**Example using cURL:**
+```bash
+curl -X POST http://localhost:8080/images \
+  -F "image=@/path/to/your/image.jpg" \
+  -F "filename=my-custom-name.jpg"
+```
+
+### Update Existing Image
+
+**Endpoint:** `PUT /images`
+
+**Content-Type:** `multipart/form-data`
+
+**Parameters:**
+- `image` (required): The image file to upload
+- `filename` (required): The filename of the existing image to update
+
+**Example using cURL:**
+```bash
+curl -X PUT http://localhost:8080/images \
+  -F "image=@/path/to/your/new-image.jpg" \
+  -F "filename=existing-image.jpg"
+```
+
 ## 🏗 Build & Run
 
 ### Prerequisites
