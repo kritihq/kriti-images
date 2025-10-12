@@ -61,7 +61,23 @@ GET /cgi/images/tr:blur=10,rotate=45,background=white/image1.jpg
 - `quality` - JPEG/WebP quality (1-100, higher = better quality)
 - `background` - Background color (hex: `#ff0000`, named: `red`, rgb: `rgb(255,0,0)`)
 
-## Upload images
+## 🔧 Upload Images
+
+> **Note**: This functionality is still experimental and _could be removed_ in future updates. It is disabled by default and must be enabled using configs.
+
+### Enabling Upload APIs
+
+**YAML Configuration:**
+```yaml
+experimental:
+  enable_upload_api: true
+```
+
+**TOML Configuration:**
+```toml
+[experimental]
+enable_upload_api = true
+```
 
 ### New Image
 
@@ -158,6 +174,7 @@ Create a `config.yaml` or `config.toml` file in the project root.
 - **images.max_file_size_in_bytes** - Maximum image file size, any source image beyond will not be processed (default: 52428800 (50MB))
 - **limiter.max** - Rate limit per minute (default: 100)
 - **limiter.expiration** - Rate limit window (default: 1m)
+- **experimental.enable_upload_api** - Enable/disable upload APIs (POST/PUT /images) (default: false)
 
 ## 🌐 API Reference
 

@@ -12,3 +12,6 @@ max_file_size_in_bytes= 52428800
 [limiter]
 max = 100
 expiration = "1m"
+
+[experimental]
+enable_upload_api = false

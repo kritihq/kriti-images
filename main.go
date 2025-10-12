@@ -68,6 +68,11 @@ func main() {
 	log.Info("registering routes")
 	routes.BindRoutesBase(server, &src)
 
+	if cfg.Experimental.EnableUploadAPI {
+		log.Info("registering api/v0/upload")
+		routes.BindAPIUpload(server, &src)
+	}
+
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Server.Port))
 	if err != nil {
 		log.Panicw("failed to start listener on port", "port", cfg.Server.Port, "error", err)

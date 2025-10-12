@@ -8,9 +8,10 @@ import (
 
 // Config holds all configuration for the application
 type Config struct {
-	Server  ServerConfig  `mapstructure:"server"`
-	Images  ImagesConfig  `mapstructure:"images"`
-	Limiter LimiterConfig `mapstructure:"limiter"`
+	Server       ServerConfig       `mapstructure:"server"`
+	Images       ImagesConfig       `mapstructure:"images"`
+	Limiter      LimiterConfig      `mapstructure:"limiter"`
+	Experimental ExperimentalConfig `mapstructure:"experimental"`
 }
 
 // ServerConfig holds server-specific configuration
@@ -32,6 +33,11 @@ type ImagesConfig struct {
 type LimiterConfig struct {
 	Max        int           `mapstructure:"max"`
 	Expiration time.Duration `mapstructure:"expiration"`
+}
+
+// ExperimentalConfig holds experimental feature configuration
+type ExperimentalConfig struct {
+	EnableUploadAPI bool `mapstructure:"enable_upload_api"`
 }
 
 // LoadConfig reads configuration from file and environment variables
@@ -72,4 +78,7 @@ func setDefaults() {
 	// Rate limiter defaults
 	viper.SetDefault("limiter.max", 100)
 	viper.SetDefault("limiter.expiration", "1m")
+
+	// Experimental defaults
+	viper.SetDefault("experimental.enable_upload_api", false)
 }

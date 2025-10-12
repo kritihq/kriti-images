@@ -12,3 +12,6 @@ images:
 limiter:
   max: 100
   expiration: 1m
+
+experimental:
+  enable_upload_api: false
