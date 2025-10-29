@@ -44,8 +44,8 @@ func main() {
 	}
 
 	server.Use(limiter.New(limiter.Config{
-		Max:               cfg.Limiter.Max,
-		Expiration:        cfg.Limiter.Expiration,
+		Max:               cfg.Server.Limiter.Max,
+		Expiration:        cfg.Server.Limiter.Expiration,
 		LimiterMiddleware: limiter.SlidingWindow{},
 		Next: func(c *fiber.Ctx) bool {
 			return c.IP() == "127.0.0.1" // for testing; skip rate limiter when localhost

@@ -10,7 +10,6 @@ import (
 type Config struct {
 	Server       ServerConfig       `mapstructure:"server"`
 	Images       ImagesConfig       `mapstructure:"images"`
-	Limiter      LimiterConfig      `mapstructure:"limiter"`
 	Experimental ExperimentalConfig `mapstructure:"experimental"`
 }
 
@@ -20,6 +19,7 @@ type ServerConfig struct {
 	EnablePrintRoutes bool          `mapstructure:"enable_print_routes"`
 	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
 	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
+	Limiter           LimiterConfig `mapstructure:"limiter"`
 }
 
 // ImagesConfig holds image-specific configuration
@@ -76,8 +76,8 @@ func setDefaults() {
 	viper.SetDefault("max_file_size_in_bytes", 50*1024*1024) // 50MB
 
 	// Rate limiter defaults
-	viper.SetDefault("limiter.max", 100)
-	viper.SetDefault("limiter.expiration", "1m")
+	viper.SetDefault("server.limiter.max", 100)
+	viper.SetDefault("server.limiter.expiration", "1m")
 
 	// Experimental defaults
 	viper.SetDefault("experimental.enable_upload_api", false)

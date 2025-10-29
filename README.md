@@ -172,8 +172,8 @@ Create a `config.yaml` or `config.toml` file in the project root.
 - **images.base_path** - Image source directory (default: "web/static/assets")
 - **images.max_image_dimension** - Maximum image dimension, any source image beyond will not be processed (default: 8192 (8K))
 - **images.max_file_size_in_bytes** - Maximum image file size, any source image beyond will not be processed (default: 52428800 (50MB))
-- **limiter.max** - Rate limit per minute (default: 100)
-- **limiter.expiration** - Rate limit window (default: 1m)
+- **server.limiter.max** - Rate limit per minute (default: 100)
+- **server.limiter.expiration** - Rate limit window (default: 1m)
 - **experimental.enable_upload_api** - Enable/disable upload APIs (POST/PUT /api/v0/images) (default: false)
 
 > configs under `experimental` are temporary and so are the features they relate to. These configs & and the related features could be removed/moved in future releases

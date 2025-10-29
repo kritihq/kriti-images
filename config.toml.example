@@ -4,14 +4,14 @@ enable_print_routes = false
 read_timeout = "30s"
 write_timeout = "30s"
 
+[server.limiter]
+max = 100
+expiration = "1m"
+
 [images]
 base_path = "web/static/assets"
 max_image_dimension = 8192
 max_file_size_in_bytes= 52428800
-
-[limiter]
-max = 100
-expiration = "1m"
 
 [experimental]
 enable_upload_api = false
