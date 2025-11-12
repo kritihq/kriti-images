@@ -15,11 +15,20 @@ type Config struct {
 
 // ServerConfig holds server-specific configuration
 type ServerConfig struct {
-	Port              int           `mapstructure:"port"`
-	EnablePrintRoutes bool          `mapstructure:"enable_print_routes"`
-	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
-	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
-	Limiter           LimiterConfig `mapstructure:"limiter"`
+	Port              int               `mapstructure:"port"`
+	EnablePrintRoutes bool              `mapstructure:"enable_print_routes"`
+	ReadTimeout       time.Duration     `mapstructure:"read_timeout"`
+	WriteTimeout      time.Duration     `mapstructure:"write_timeout"`
+	Limiter           LimiterConfig     `mapstructure:"limiter"`
+	CrossOriginPolicy CrossOriginPolicy `mapstructure:"cross_origin_policy"`
+}
+
+// CrossOriginPolicy holds cross-origin policy configuration
+type CrossOriginPolicy struct {
+	Corp             string `mapstructure:"corp"`
+	CorsAllowOrigins string `mapstructure:"cors_allow_origins"`
+	CorsAllowMethods string `mapstructure:"cors_allow_methods"`
+	CorsAllowHeaders string `mapstructure:"cors_allow_headers"`
 }
 
 // ImagesConfig holds image-specific configuration
@@ -69,6 +78,11 @@ func setDefaults() {
 	viper.SetDefault("server.enable_print_routes", false)
 	viper.SetDefault("server.read_timeout", "30s")
 	viper.SetDefault("server.write_timeout", "30s")
+
+	viper.SetDefault("server.cross_origin_policy.corp", "cross-origin")
+	viper.SetDefault("server.cross_origin_policy.cors_allow_origins", "*")
+	viper.SetDefault("server.cross_origin_policy.cors_allow_methods", "GET,POST,PUT,DELETE,HEAD,OPTIONS")
+	viper.SetDefault("server.cross_origin_policy.cors_allow_headers", "Origin,Content-Type,Accept,Authorization,Cache-Control,If-None-Match")
 
 	// Images defaults
 	viper.SetDefault("images.base_path", "web/static/assets")

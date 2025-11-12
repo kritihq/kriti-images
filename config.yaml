@@ -6,6 +6,11 @@ server:
   limiter:
     max: 100
     expiration: 1m
+  cross_origin_policy:
+    corp: "cross-origin"
+    cors_allow_origins: "*"
+    cors_allow_methods: "GET,POST,PUT,DELETE,HEAD,OPTIONS"
+    cors_allow_headers: "Origin,Content-Type,Accept,Authorization,Cache-Control,If-None-Match"
 
 images:
   base_path: "web/static/assets"

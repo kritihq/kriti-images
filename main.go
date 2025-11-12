@@ -51,11 +51,13 @@ func main() {
 			return c.IP() == "127.0.0.1" // for testing; skip rate limiter when localhost
 		},
 	}))
-	server.Use(helmet.New())
+	server.Use(helmet.New(helmet.Config{
+		CrossOriginResourcePolicy: cfg.Server.CrossOriginPolicy.Corp,
+	}))
 	server.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-		AllowMethods: "GET,HEAD,OPTIONS",
-		AllowHeaders: "Origin,Content-Type,Accept,Authorization,Cache-Control,If-None-Match",
+		AllowOrigins: cfg.Server.CrossOriginPolicy.CorsAllowOrigins,
+		AllowMethods: cfg.Server.CrossOriginPolicy.CorsAllowMethods,
+		AllowHeaders: cfg.Server.CrossOriginPolicy.CorsAllowHeaders,
 	}))
 	server.Use(etag.New())
 	server.Get("/metrics", monitor.New())
