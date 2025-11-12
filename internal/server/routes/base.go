@@ -118,8 +118,4 @@ func BindRoutesBase(server *fiber.App, imageSource imagesources.ImageSource) {
 		MaxAge: 86400, // 24 hours
 	})
 
-	server.Use(func(c *fiber.Ctx) error {
-		return c.Status(http.StatusNotFound).Render("404", 0)
-	})
-
 }

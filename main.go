@@ -73,6 +73,11 @@ func main() {
 		routes.BindAPIUpload(server, &src)
 	}
 
+	// Register 404 handler last, after all other routes
+	server.Use(func(c *fiber.Ctx) error {
+		return c.Status(404).Render("404", 0)
+	})
+
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Server.Port))
 	if err != nil {
 		log.Panicw("failed to start listener on port", "port", cfg.Server.Port, "error", err)
