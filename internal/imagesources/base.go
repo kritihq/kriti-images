@@ -3,6 +3,7 @@
 package imagesources
 
 import (
+	"context"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -27,7 +28,7 @@ type ImageSource interface {
 	//
 	// In case of any error or no image found, `error` is returned and other
 	// return values are null and empty.
-	GetImage(fileName string) (image.Image, string, error)
+	GetImage(ctx context.Context, fileName string) (image.Image, string, error)
 
 	// UploadImage uploads the image with name `fileName` to the source.
 	// If the image is present it is returned as `image.Image` along with its
@@ -35,7 +36,7 @@ type ImageSource interface {
 	//
 	// In case of any error or no image found, `error` is returned and other
 	// return values are null and empty.
-	UploadImage(fileName string, file image.Image) error
+	UploadImage(ctx context.Context, fileName string, file image.Image) error
 }
 
 // TODO: add other S3 compatible sources
@@ -46,7 +47,14 @@ type ImageSourceLocal struct {
 	BasePath string // base path of the mounted disk
 }
 
-func (i *ImageSourceLocal) GetImage(fileName string) (image.Image, string, error) {
+func NewImageSourceLocal(basePath string, validations *SourceImageValidations) *ImageSourceLocal {
+	return &ImageSourceLocal{
+		BasePath:               basePath,
+		SourceImageValidations: *validations,
+	}
+}
+
+func (i *ImageSourceLocal) GetImage(ctx context.Context, fileName string) (image.Image, string, error) {
 	// Ensure the path is safe and doesn't contain directory traversal
 	cleanPath := filepath.Clean(fileName)
 	if filepath.IsAbs(cleanPath) || strings.Contains(cleanPath, "..") {
@@ -83,7 +91,7 @@ func (i *ImageSourceLocal) GetImage(fileName string) (image.Image, string, error
 	return img, format, nil
 }
 
-func (i *ImageSourceLocal) UploadImage(fileName string, file image.Image) error {
+func (i *ImageSourceLocal) UploadImage(ctx context.Context, fileName string, file image.Image) error {
 	// Ensure the path is safe and doesn't contain directory traversal
 	cleanPath := filepath.Clean(fileName)
 	if filepath.IsAbs(cleanPath) || strings.Contains(cleanPath, "..") {

@@ -15,9 +15,15 @@ cors_allow_methods = "GET,POST,PUT,DELETE,HEAD,OPTIONS"
 cors_allow_headers = "Origin,Content-Type,Accept,Authorization,Cache-Control,If-None-Match"
 
 [images]
-base_path = "web/static/assets"
 max_image_dimension = 8192
 max_file_size_in_bytes= 52428800
+source="local"
+
+[images.awss3]
+bucket=""
+
+[images.local]
+base_path = ""
 
 [experimental]
 enable_upload_api = false

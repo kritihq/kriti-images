@@ -13,9 +13,13 @@ server:
     cors_allow_headers: "Origin,Content-Type,Accept,Authorization,Cache-Control,If-None-Match"
 
 images:
-  base_path: "web/static/assets"
   max_image_dimension: 8192 # 8k
   max_file_size_in_bytes: 52428800 # 50MB
+  source: "local" # allowed values awss3, local
+  awss3:
+    bucket: ""
+  local:
+    base_path: ""
 
 experimental:
   enable_upload_api: false
