@@ -2,6 +2,8 @@
 
 A high-performance image transformation service built in Go, providing a URL-based API for real-time image processing. An open-source alternative to Cloudflare Images and ImageKit.
 
+[Website](https://kritiimages.com) | [Demo](https://kritiimages.com/docs/transformations)
+
 ## 🚀 Features
 
 - **URL-based transformations** - Transform images through simple URL parameters
