@@ -14,6 +14,7 @@ A high-performance image transformation service built in Go, providing a URL-bas
 - **Background colors** - Support for hex, RGB, and named colors
 - **High performance** - Built with Go and optimized for speed
 - **CDN-friendly** - Proper caching headers for optimal CDN integration
+- **AWS S3 support** - Store images in AWS S3 and serve them through Kriti Images
 
 ## 📖 Quick Example
 
@@ -125,6 +126,7 @@ curl -X PUT http://localhost:8080/api/v0/images \
 ### Prerequisites
 - Go 1.24.6 or later
 - Git
+- AWS credentials (Optional)
 
 ### Development Setup
 
@@ -171,12 +173,16 @@ Create a `config.yaml` or `config.toml` file in the project root.
 - **server.enable_print_routes** - Enable route debugging (default: false)
 - **server.read_timeout** - Request read timeout (default: 30s)
 - **server.write_timeout** - Response write timeout (default: 30s)
-- **images.base_path** - Image source directory (default: "web/static/assets")
+- **images.source** - Network source, `local` or `awss3` (default: local)
+- **images.local.base_path** - Image source directory (default: "")
+- **images.aws.s3.bucket** - AWS S3 bucket name (default: "")
 - **images.max_image_dimension** - Maximum image dimension, any source image beyond will not be processed (default: 8192 (8K))
 - **images.max_file_size_in_bytes** - Maximum image file size, any source image beyond will not be processed (default: 52428800 (50MB))
 - **server.limiter.max** - Rate limit per minute (default: 100)
 - **server.limiter.expiration** - Rate limit window (default: 1m)
 - **experimental.enable_upload_api** - Enable/disable upload APIs (POST/PUT /api/v0/images) (default: false)
+
+> to use `awss3` as `images.source` you must have AWS CLI installed and configured
 
 > configs under `experimental` are temporary and so are the features they relate to. These configs & and the related features could be removed/moved in future releases
 
