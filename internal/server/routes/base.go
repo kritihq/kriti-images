@@ -32,7 +32,7 @@ func BindRoutesBase(server *fiber.App, imageSource imagesources.ImageSource) {
 			return c.Status(http.StatusBadRequest).SendString("Image parameter is required")
 		}
 
-		src, srcFormat, err := imageSource.GetImage(imagePath)
+		src, srcFormat, err := imageSource.GetImage(c.Context(), imagePath)
 		if err != nil {
 			return c.Status(http.StatusNotFound).SendString("source image not found")
 		}

@@ -33,9 +33,20 @@ type CrossOriginPolicy struct {
 
 // ImagesConfig holds image-specific configuration
 type ImagesConfig struct {
-	BasePath            string `mapstructure:"base_path"`
-	MaxImageDimension   int    `mapstructure:"max_image_dimension"`
-	MaxImageSizeInBytes int64  `mapstructure:"max_file_size_in_bytes"`
+	Source string            `mapstructure:"source"`
+	AwsS3  ImagesConfigAWSS3 `mapstructure:"awss3"`
+	Local  ImagesConfigLocal `mapstructure:"local"`
+
+	MaxImageDimension   int   `mapstructure:"max_image_dimension"`
+	MaxImageSizeInBytes int64 `mapstructure:"max_file_size_in_bytes"`
+}
+
+type ImagesConfigAWSS3 struct {
+	Bucket string `mapstructure:"bucket"`
+}
+
+type ImagesConfigLocal struct {
+	BasePath string `mapstructure:"base_path"`
 }
 
 // LimiterConfig holds rate limiter configuration
@@ -85,9 +96,11 @@ func setDefaults() {
 	viper.SetDefault("server.cross_origin_policy.cors_allow_headers", "Origin,Content-Type,Accept,Authorization,Cache-Control,If-None-Match")
 
 	// Images defaults
-	viper.SetDefault("images.base_path", "web/static/assets")
-	viper.SetDefault("max_dimension", 8192)                  // 8K
-	viper.SetDefault("max_file_size_in_bytes", 50*1024*1024) // 50MB
+	viper.SetDefault("images.source", "local")
+	viper.SetDefault("images.local.base_path", "")
+
+	viper.SetDefault("images.max_dimension", 8192)                  // 8K
+	viper.SetDefault("images.max_file_size_in_bytes", 50*1024*1024) // 50MB
 
 	// Rate limiter defaults
 	viper.SetDefault("server.limiter.max", 100)

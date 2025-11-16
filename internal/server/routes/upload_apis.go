@@ -65,7 +65,7 @@ func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
 		}
 
 		// Upload the image using the image source
-		if err := imageSource.UploadImage(filename, img); err != nil {
+		if err := imageSource.UploadImage(c.Context(), filename, img); err != nil {
 			log.Errorw("failed to upload image", "filename", filename, "error", err.Error())
 			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 				"error": fmt.Sprintf("Failed to save image: %s", err.Error()),
@@ -118,7 +118,7 @@ func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
 		}
 
 		// Check if the image exists (for PUT, we might want to verify it exists)
-		_, _, err = imageSource.GetImage(filename)
+		_, _, err = imageSource.GetImage(c.Context(), filename)
 		if err != nil {
 			return c.Status(http.StatusNotFound).JSON(fiber.Map{
 				"error": "Image not found",
@@ -145,7 +145,7 @@ func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
 		}
 
 		// Upload the image using the image source (this will overwrite the existing file)
-		if err := imageSource.UploadImage(filename, img); err != nil {
+		if err := imageSource.UploadImage(c.Context(), filename, img); err != nil {
 			log.Errorw("failed to update image", "filename", filename, "error", err.Error())
 			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 				"error": fmt.Sprintf("Failed to update image: %s", err.Error()),

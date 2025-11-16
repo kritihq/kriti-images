@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net"
 
@@ -34,15 +35,6 @@ func main() {
 		WriteTimeout:          cfg.Server.WriteTimeout,
 		Views:                 html.New("./web/templates", ".html"),
 	})
-
-	src := imagesources.ImageSourceLocal{
-		BasePath: cfg.Images.BasePath,
-		SourceImageValidations: imagesources.SourceImageValidations{
-			MaxImageDimension:  cfg.Images.MaxImageDimension,
-			MaxFileSizeInBytes: cfg.Images.MaxImageSizeInBytes,
-		},
-	}
-
 	server.Use(limiter.New(limiter.Config{
 		Max:               cfg.Server.Limiter.Max,
 		Expiration:        cfg.Server.Limiter.Expiration,
@@ -67,12 +59,17 @@ func main() {
 	}))
 	server.Use(logger.New())
 
+	src, err := getImageSource(context.Background(), cfg)
+	if err != nil {
+		log.Panicf("failed to configure image source, err: %w", err)
+	}
+
 	log.Info("registering routes")
-	routes.BindRoutesBase(server, &src)
+	routes.BindRoutesBase(server, src)
 
 	if cfg.Experimental.EnableUploadAPI {
 		log.Info("registering api/v0/upload")
-		routes.BindAPIUpload(server, &src)
+		routes.BindAPIUpload(server, src)
 	}
 
 	// Register 404 handler last, after all other routes
@@ -91,5 +88,18 @@ func main() {
 	log.Infow("starting server", "port", port)
 	if err := server.Listener(listener); err != nil {
 		log.Errorw("failed to start server", "error", err.Error())
+	}
+}
+
+func getImageSource(ctx context.Context, cfg *config.Config) (imagesources.ImageSource, error) {
+	validations := imagesources.SourceImageValidations{
+		MaxImageDimension:  cfg.Images.MaxImageDimension,
+		MaxFileSizeInBytes: cfg.Images.MaxImageSizeInBytes,
+	}
+
+	if cfg.Images.Source == "awss3" {
+		return imagesources.NewImageSourceS3(ctx, cfg.Images.AwsS3.Bucket, &validations)
+	} else {
+		return imagesources.NewImageSourceLocal(cfg.Images.Local.BasePath, &validations), nil
 	}
 }
