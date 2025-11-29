@@ -1,1 +1,5 @@
 kriti-images
+node_modules
+*.png
+*.json
+*.js

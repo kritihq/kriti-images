@@ -106,16 +106,4 @@ func BindRoutesBase(server *fiber.App, imageSource imagesources.ImageSource) {
 
 		return c.Status(http.StatusOK).Send(buffer.Bytes())
 	})
-
-	server.Get("/demo", func(c *fiber.Ctx) error {
-		sampleImage := "image1.jpg"
-		return c.Render("demo", fiber.Map{
-			"SampleImage": sampleImage,
-		})
-	})
-
-	server.Static("/static", "web/static", fiber.Static{
-		MaxAge: 86400, // 24 hours
-	})
-
 }
