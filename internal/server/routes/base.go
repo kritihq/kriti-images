@@ -18,7 +18,9 @@ import (
 	"github.com/kritihq/kriti-images/internal/transformations"
 )
 
-func BindRoutesBase(server *fiber.App, imageSource imagesources.ImageSource) {
+// TODO: separate api & application logic
+
+func BindRoutesBase(server *fiber.App, imageSourceDefault imagesources.ImageSource, imageSourceHTTP imagesources.ImageSourceHTTP) {
 	server.Get(`/cgi/images/tr\::options?/:image`, func(c *fiber.Ctx) error {
 		optionsStr := c.Params("options", "")
 		imagePath := c.Params("image", "")
@@ -30,6 +32,13 @@ func BindRoutesBase(server *fiber.App, imageSource imagesources.ImageSource) {
 
 		if imagePath == "" {
 			return c.Status(http.StatusBadRequest).SendString("Image parameter is required")
+		}
+
+		var imageSource imagesources.ImageSource
+		if strings.HasPrefix(imagePath, "http://") || strings.HasPrefix(imagePath, "https://") {
+			imageSource = imageSourceHTTP
+		} else {
+			imageSource = imageSourceDefault
 		}
 
 		src, srcFormat, err := imageSource.GetImage(c.Context(), imagePath)

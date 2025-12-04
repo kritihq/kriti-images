@@ -9,7 +9,6 @@ require (
 	github.com/chai2010/webp v1.4.0
 	github.com/disintegration/gift v1.2.1
 	github.com/gofiber/fiber/v2 v2.52.9
-	github.com/gofiber/template/html/v2 v2.1.3
 	github.com/spf13/viper v1.21.0
 )
 
@@ -32,8 +31,6 @@ require (
 	github.com/aws/smithy-go v1.23.2 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
-	github.com/gofiber/template v1.8.3 // indirect
-	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
