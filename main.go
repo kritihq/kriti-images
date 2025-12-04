@@ -14,7 +14,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
-	"github.com/gofiber/template/html/v2"
 
 	"github.com/kritihq/kriti-images/internal/config"
 	"github.com/kritihq/kriti-images/internal/imagesources"
@@ -33,7 +32,6 @@ func main() {
 		DisableStartupMessage: true,
 		ReadTimeout:           cfg.Server.ReadTimeout,
 		WriteTimeout:          cfg.Server.WriteTimeout,
-		Views:                 html.New("./web/templates", ".html"),
 	})
 	server.Use(limiter.New(limiter.Config{
 		Max:               cfg.Server.Limiter.Max,
@@ -59,17 +57,17 @@ func main() {
 	}))
 	server.Use(logger.New())
 
-	src, err := getImageSource(context.Background(), cfg)
+	imgSrcDefault, imgSrcHTTP, err := getImageSource(context.Background(), cfg)
 	if err != nil {
 		log.Panicf("failed to configure image source, err: %w", err)
 	}
 
 	log.Info("registering routes")
-	routes.BindRoutesBase(server, src)
+	routes.BindRoutesBase(server, imgSrcDefault, imgSrcHTTP)
 
 	if cfg.Experimental.EnableUploadAPI {
 		log.Info("registering api/v0/upload")
-		routes.BindAPIUpload(server, src)
+		routes.BindAPIUpload(server, imgSrcDefault)
 	}
 
 	// Register 404 handler last, after all other routes
@@ -91,15 +89,18 @@ func main() {
 	}
 }
 
-func getImageSource(ctx context.Context, cfg *config.Config) (imagesources.ImageSource, error) {
+func getImageSource(ctx context.Context, cfg *config.Config) (imagesources.ImageSource, imagesources.ImageSourceHTTP, error) {
 	validations := imagesources.SourceImageValidations{
 		MaxImageDimension:  cfg.Images.MaxImageDimension,
 		MaxFileSizeInBytes: cfg.Images.MaxImageSizeInBytes,
 	}
 
+	imageSourceHTTP := imagesources.NewImageSourceURL(&validations)
+
 	if cfg.Images.Source == "awss3" {
-		return imagesources.NewImageSourceS3(ctx, cfg.Images.AwsS3.Bucket, &validations)
+		defaultSrc, err := imagesources.NewImageSourceS3(ctx, cfg.Images.AwsS3.Bucket, &validations)
+		return defaultSrc, *imageSourceHTTP, err
 	} else {
-		return imagesources.NewImageSourceLocal(cfg.Images.Local.BasePath, &validations), nil
+		return imagesources.NewImageSourceLocal(cfg.Images.Local.BasePath, &validations), *imageSourceHTTP, nil
 	}
 }
