@@ -15,6 +15,7 @@ A high-performance image transformation service built in Go, providing a URL-bas
 - **High performance** - Built with Go and optimized for speed
 - **CDN-friendly** - Proper caching headers for optimal CDN integration
 - **AWS S3 support** - Store images in AWS S3 and serve them through Kriti Images
+- **Use URL for image source** - No need to upload images to storage, provide URL instead
 
 ## 📖 Quick Example
 
@@ -35,6 +36,9 @@ GET /cgi/images/tr:width=500,brightness=20,contrast=30,format=webp/image1.jpg
 
 # Blur with rotation
 GET /cgi/images/tr:blur=10,rotate=45,background=white/image1.jpg
+
+# URL based image source, always escape image path
+GET /cgi/images/tr:flip=hv/https%3A%2F%2Fimages.unsplash.com%2Fphoto-1764782979306-1e489462d895
 ```
 
 ## 🛠 Supported Transformations
@@ -144,6 +148,8 @@ curl -X PUT http://localhost:8080/api/v0/images \
 3. **Access the service**
    - API: `http://localhost:8080/cgi/images/tr:<transformations>/<image-name>`
    - Demo page: `http://localhost:8080/demo`
+
+   > Always URL escape <image-name> path
 
 ### Production Build
 
