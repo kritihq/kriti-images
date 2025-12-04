@@ -7,6 +7,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -23,7 +24,11 @@ import (
 func BindRoutesBase(server *fiber.App, imageSourceDefault imagesources.ImageSource, imageSourceHTTP imagesources.ImageSourceHTTP) {
 	server.Get(`/cgi/images/tr\::options?/:image`, func(c *fiber.Ctx) error {
 		optionsStr := c.Params("options", "")
-		imagePath := c.Params("image", "")
+		imagePath, err := url.PathUnescape(c.Params("image", ""))
+		if err != nil {
+			log.Warn("failed to unescape image path, using original value", "path", imagePath)
+			imagePath = c.Params("image", "")
+		}
 		log.Infow("new request", "options", optionsStr, "path", imagePath)
 
 		if optionsStr == "" {
