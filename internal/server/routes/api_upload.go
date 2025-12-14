@@ -9,10 +9,12 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/kritihq/kriti-images/internal/imagesources"
+	"github.com/kritihq/kriti-images/pkg/kritiimages"
 )
 
-func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
+func BindAPIUpload(server *fiber.App, k *kritiimages.KritiImages) {
+	// TODO: uploads only happen on default sources, for now
+
 	server.Post("/api/v0/images", func(c *fiber.Ctx) error {
 		// Get the uploaded file
 		file, err := c.FormFile("image")
@@ -65,7 +67,7 @@ func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
 		}
 
 		// Upload the image using the image source
-		if err := imageSource.UploadImage(c.Context(), filename, img); err != nil {
+		if err := k.DefaultSource.UploadImage(c.Context(), filename, img); err != nil {
 			log.Errorw("failed to upload image", "filename", filename, "error", err.Error())
 			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 				"error": fmt.Sprintf("Failed to save image: %s", err.Error()),
@@ -118,7 +120,7 @@ func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
 		}
 
 		// Check if the image exists (for PUT, we might want to verify it exists)
-		_, _, err = imageSource.GetImage(c.Context(), filename)
+		_, _, err = k.DefaultSource.GetImage(c.Context(), filename)
 		if err != nil {
 			return c.Status(http.StatusNotFound).JSON(fiber.Map{
 				"error": "Image not found",
@@ -145,7 +147,7 @@ func BindAPIUpload(server *fiber.App, imageSource imagesources.ImageSource) {
 		}
 
 		// Upload the image using the image source (this will overwrite the existing file)
-		if err := imageSource.UploadImage(c.Context(), filename, img); err != nil {
+		if err := k.DefaultSource.UploadImage(c.Context(), filename, img); err != nil {
 			log.Errorw("failed to update image", "filename", filename, "error", err.Error())
 			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 				"error": fmt.Sprintf("Failed to update image: %s", err.Error()),

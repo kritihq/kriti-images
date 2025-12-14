@@ -1,4 +1,4 @@
-package transformations
+package utils
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 )
 
-func parseBackgroundColor(value string) (color.Color, error) {
+func ParseBackgroundColor(value string) (color.Color, error) {
 	// URL decode the value first (handles %23 -> #, %28 -> (, etc.)
 	decodedValue, err := url.QueryUnescape(value)
 	if err != nil {
@@ -21,23 +21,23 @@ func parseBackgroundColor(value string) (color.Color, error) {
 
 	// Handle hex colors (#RRGGBB or #RGB)
 	if strings.HasPrefix(decodedValue, "#") {
-		return parseHexColor(decodedValue)
+		return ParseHexColor(decodedValue)
 	}
 
 	// Handle CSS named colors
-	if namedColor := parseNamedColor(decodedValue); namedColor != nil {
+	if namedColor := ParseNamedColor(decodedValue); namedColor != nil {
 		return namedColor, nil
 	}
 
 	// Handle rgb() and rgba() functions
 	if strings.HasPrefix(decodedValue, "rgb") {
-		return parseRGBColor(decodedValue)
+		return ParseRGBColor(decodedValue)
 	}
 
 	return nil, fmt.Errorf("unsupported color format: %s", decodedValue)
 }
 
-func parseHexColor(hex string) (color.Color, error) {
+func ParseHexColor(hex string) (color.Color, error) {
 	hex = strings.TrimPrefix(hex, "#")
 
 	var r, g, b, a uint8 = 0, 0, 0, 255
@@ -75,7 +75,7 @@ func parseHexColor(hex string) (color.Color, error) {
 	return color.RGBA{r, g, b, a}, nil
 }
 
-func parseNamedColor(name string) color.Color {
+func ParseNamedColor(name string) color.Color {
 	colors := map[string]color.RGBA{
 		"transparent": {0, 0, 0, 0},
 		"black":       {0, 0, 0, 255},
@@ -99,7 +99,7 @@ func parseNamedColor(name string) color.Color {
 	return nil
 }
 
-func parseRGBColor(rgbStr string) (color.Color, error) {
+func ParseRGBColor(rgbStr string) (color.Color, error) {
 	// Match rgb(r g b) or rgba(r g b a) - CSS4 modern syntax with spaces
 	// Also support legacy rgb(r,g,b) and rgba(r,g,b,a) with commas
 	rgbRegex := regexp.MustCompile(`rgba?\(\s*(\d+)[\s,]+(\d+)[\s,]+(\d+)(?:[\s,]+(\d+(?:\.\d+)?))?\s*\)`)
@@ -143,7 +143,7 @@ func parseRGBColor(rgbStr string) (color.Color, error) {
 	return color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)}, nil
 }
 
-func parseFloatValue(value string, min, max, defaultVal float32) float32 {
+func ParseFloatValue(value string, min, max, defaultVal float32) float32 {
 	if value == "" {
 		return defaultVal
 	}
@@ -156,7 +156,7 @@ func parseFloatValue(value string, min, max, defaultVal float32) float32 {
 	return parsed32
 }
 
-func parseIntValue(value string, min, max int) (int, error) {
+func ParseIntValue(value string, min, max int) (int, error) {
 	if value == "" {
 		return 0, fmt.Errorf("value cannot be empty")
 	}
@@ -173,7 +173,7 @@ func parseIntValue(value string, min, max int) (int, error) {
 	return parsed, nil
 }
 
-func parseRotateAngle(value string) (float32, error) {
+func ParseRotateAngle(value string) (float32, error) {
 	// Handle common rotation shortcuts
 	switch strings.ToLower(strings.TrimSpace(value)) {
 	case "90", "cw", "right":
@@ -215,7 +215,7 @@ func parseRotateAngle(value string) (float32, error) {
 	return float32(angle), nil
 }
 
-func parseFormatValue(value string) (string, error) {
+func ParseFormatValue(value string) (string, error) {
 	format := strings.ToLower(strings.TrimSpace(value))
 
 	switch format {
@@ -236,8 +236,8 @@ type BorderRadiusValue struct {
 	IsPercent bool
 }
 
-// parseBorderRadiusValue parses border radius values like "10", "20px", "15%"
-func parseBorderRadiusValue(value string) (*BorderRadiusValue, error) {
+// ParseBorderRadiusValue parses border radius values like "10", "20px", "15%"
+func ParseBorderRadiusValue(value string) (*BorderRadiusValue, error) {
 	if value == "" {
 		return nil, fmt.Errorf("border radius value cannot be empty")
 	}

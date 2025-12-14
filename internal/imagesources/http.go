@@ -14,12 +14,6 @@ type ImageSourceHTTP struct {
 	SourceImageValidations
 }
 
-func NewImageSourceURL(validations *SourceImageValidations) *ImageSourceHTTP {
-	return &ImageSourceHTTP{
-		SourceImageValidations: *validations,
-	}
-}
-
 func (i ImageSourceHTTP) GetImage(ctx context.Context, url string) (image.Image, string, error) {
 	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
 		return nil, "", fmt.Errorf("invalid URL")
