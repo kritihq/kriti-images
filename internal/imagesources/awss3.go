@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/chai2010/webp"
 )
@@ -20,20 +19,6 @@ type ImageSourceS3 struct {
 	SourceImageValidations
 	Bucket string
 	Client *s3.Client
-}
-
-func NewImageSourceS3(ctx context.Context, bucket string, validations *SourceImageValidations) (*ImageSourceS3, error) {
-	cfg, err := config.LoadDefaultConfig(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load AWS config: %w", err)
-	}
-
-	client := s3.NewFromConfig(cfg)
-	return &ImageSourceS3{
-		SourceImageValidations: *validations,
-		Bucket:                 bucket,
-		Client:                 client,
-	}, nil
 }
 
 func (i *ImageSourceS3) GetImage(ctx context.Context, fileName string) (image.Image, string, error) {

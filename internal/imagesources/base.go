@@ -20,38 +20,12 @@ type SourceImageValidations struct {
 	MaxFileSizeInBytes int64
 }
 
-// ImageSource represents an source to retrieve images from.
-type ImageSource interface {
-	// GetImage retrieves the image with name `fileName` from the source.
-	// If the image is present it is returned as `image.Image` along with its
-	// format i.e. extension (JPEG, PNG or WEBP).
-	//
-	// In case of any error or no image found, `error` is returned and other
-	// return values are null and empty.
-	GetImage(ctx context.Context, fileName string) (image.Image, string, error)
-
-	// UploadImage uploads the image with name `fileName` to the source.
-	// If the image is present it is returned as `image.Image` along with its
-	// format i.e. extension (JPEG, PNG or WEBP).
-	//
-	// In case of any error or no image found, `error` is returned and other
-	// return values are null and empty.
-	UploadImage(ctx context.Context, fileName string, file image.Image) error
-}
-
 // TODO: add other S3 compatible sources
 
 // ImageSourceLocal represents the machine's local disk as an image source.
 type ImageSourceLocal struct {
 	SourceImageValidations
 	BasePath string // base path of the mounted disk
-}
-
-func NewImageSourceLocal(basePath string, validations *SourceImageValidations) *ImageSourceLocal {
-	return &ImageSourceLocal{
-		BasePath:               basePath,
-		SourceImageValidations: *validations,
-	}
 }
 
 func (i *ImageSourceLocal) GetImage(ctx context.Context, fileName string) (image.Image, string, error) {

@@ -8,17 +8,18 @@ import (
 	"math"
 
 	"github.com/disintegration/gift"
+	"github.com/kritihq/kriti-images/internal/utils"
 )
 
 // createBorderRadiusFilter creates a filter that applies rounded corners to an image
-func createBorderRadiusFilter(value string) (gift.Filter, error) {
+func CreateBorderRadiusFilter(value string) (gift.Filter, error) {
 	// Validate that value is not empty
 	if value == "" {
 		return nil, fmt.Errorf("border radius value cannot be empty")
 	}
 
 	// Parse the border radius value with proper validation
-	radii, err := parseBorderRadiusValue(value)
+	radii, err := utils.ParseBorderRadiusValue(value)
 	if err != nil {
 		return nil, err
 	}
@@ -33,10 +34,10 @@ func createBorderRadiusFilter(value string) (gift.Filter, error) {
 
 // borderRadiusFilter applies rounded corners to an image
 type borderRadiusFilter struct {
-	tl *BorderRadiusValue // top-left in px
-	tr *BorderRadiusValue // top-right
-	bl *BorderRadiusValue // bottom-left
-	br *BorderRadiusValue // bottom-right
+	tl *utils.BorderRadiusValue // top-left in px
+	tr *utils.BorderRadiusValue // top-right
+	bl *utils.BorderRadiusValue // bottom-left
+	br *utils.BorderRadiusValue // bottom-right
 }
 
 func (f *borderRadiusFilter) Bounds(srcBounds image.Rectangle) image.Rectangle {

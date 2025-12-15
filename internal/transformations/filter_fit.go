@@ -12,7 +12,7 @@ import (
 	"github.com/disintegration/gift"
 )
 
-func createFitFilter(value string, destination *DestinationImage) (gift.Filter, error) {
+func CreateFitFilter(value string, width, height int, bgColor color.Color) (gift.Filter, error) {
 	// Format: just the mode name (e.g., "contain", "cover", "scaledown")
 	mode := strings.TrimSpace(value)
 
@@ -21,9 +21,6 @@ func createFitFilter(value string, destination *DestinationImage) (gift.Filter, 
 	if !slices.Contains(validModes, mode) {
 		return nil, fmt.Errorf("invalid fit mode: %s. Valid modes are: %s", mode, strings.Join(validModes, ", "))
 	}
-
-	width := destination.Width
-	height := destination.Height
 
 	// If no dimensions are set, return an error
 	if width == 0 && height == 0 {
@@ -69,7 +66,7 @@ func createFitFilter(value string, destination *DestinationImage) (gift.Filter, 
 
 	case "pad":
 		if width > 0 && height > 0 {
-			return &padFilter{width: width, height: height, bgColor: destination.BgColor}, nil
+			return &padFilter{width: width, height: height, bgColor: bgColor}, nil
 		}
 		return nil, fmt.Errorf("pad mode requires both width and height")
 	}
