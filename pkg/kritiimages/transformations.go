@@ -3,7 +3,6 @@ package kritiimages
 import (
 	"fmt"
 	"image"
-	"image/color"
 
 	"github.com/disintegration/gift"
 	"github.com/gofiber/fiber/v2/log"
@@ -11,7 +10,7 @@ import (
 	"github.com/kritihq/kriti-images/internal/utils"
 )
 
-// Supported transformations
+// Supported transformation options
 type TransformationOption int
 
 const (
@@ -32,14 +31,6 @@ const (
 	Quality
 	BorderRadius
 )
-
-type DestinationImage struct {
-	BgColor color.Color
-	Width   int
-	Height  int
-	Format  string
-	Quality int // lossy quality for JPEG & WEBP, 1 to 100 higher is better
-}
 
 func getFilters(options map[TransformationOption]string, destination *DestinationImage) ([]gift.Filter, error) {
 	filters := make([]gift.Filter, 0)

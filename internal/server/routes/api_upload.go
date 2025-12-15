@@ -13,7 +13,7 @@ import (
 )
 
 func BindAPIUpload(server *fiber.App, k *kritiimages.KritiImages) {
-	// TODO: uploads only happen on default sources, for now
+	// NOTE: uploads only happen on default sources, for now
 
 	server.Post("/api/v0/images", func(c *fiber.Ctx) error {
 		// Get the uploaded file

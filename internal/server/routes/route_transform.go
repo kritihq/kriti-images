@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"errors"
 	"fmt"
 	"image/color"
 	"net/http"
@@ -25,22 +26,28 @@ func BindRouteTransformation(server *fiber.App, k *kritiimages.KritiImages) {
 		log.Infow("new request", "options", optionsStr, "path", imagePath)
 
 		if optionsStr == "" {
-			return c.Status(http.StatusBadRequest).SendString("Options parameter is required")
+			return c.Status(http.StatusBadRequest).SendString("options parameter is required")
 		}
 
 		if imagePath == "" {
-			return c.Status(http.StatusBadRequest).SendString("Image parameter is required")
+			return c.Status(http.StatusBadRequest).SendString("image parameter is required")
 		}
 
 		// Parse transformation context
 		options, dest, err := getContextFromString(optionsStr)
 		if err != nil {
 			log.Errorw("failed to transform image", "options", optionsStr, "path", imagePath, "error", err.Error())
-			return c.Status(http.StatusInternalServerError).SendString("failed to process the request")
+			return c.Status(http.StatusInternalServerError).SendString(fmt.Sprintf("failed to process the request; %s", err.Error()))
 		}
 
 		buffer, err := k.Transform(c.Context(), imagePath, dest, options)
-		if err != nil { // TODO: handle specific errors e.g. image not found -> 404
+		if errors.Is(err, kritiimages.ErrSourceImageNotFound) {
+			return c.Status(http.StatusNotFound).SendString("image not found")
+		} else if errors.Is(err, kritiimages.ErrTransformationsNotFound) {
+			return c.Status(http.StatusBadRequest).SendString("invalid transformation requested")
+		} else if errors.Is(err, kritiimages.ErrInvalidImageFormat) {
+			return c.Status(http.StatusBadRequest).SendString("invalid image format requested")
+		} else if err != nil {
 			return c.Status(http.StatusInternalServerError).SendString("failed to transform image")
 		}
 
@@ -53,7 +60,7 @@ func BindRouteTransformation(server *fiber.App, k *kritiimages.KritiImages) {
 		case "webp":
 			c.Set("Content-Type", "image/webp")
 		default:
-			return c.Status(http.StatusBadRequest).SendString("unsupported format")
+			return c.Status(http.StatusBadRequest).SendString("invalid image format requested")
 		}
 
 		// Set CDN-friendly caching headers
@@ -76,6 +83,11 @@ func BindRouteTransformation(server *fiber.App, k *kritiimages.KritiImages) {
 	})
 }
 
+// getContextFromString converts url path portion containing transformations
+// into map of TransformationOption and provided values for that transformation.
+// e.g. blur=90,width=100 is converted to {blur: 90, width: 100}.
+//
+// return meaningful errors, they are sent as response as is
 func getContextFromString(optionsStr string) (map[kritiimages.TransformationOption]string, *kritiimages.DestinationImage, error) {
 	options := strings.Split(optionsStr, ",")
 
@@ -125,6 +137,9 @@ func getContextFromString(optionsStr string) (map[kritiimages.TransformationOpti
 	return trValues, &destination, nil
 }
 
+// processOption returns given string to TransformationOption enum and its value
+//
+// return meaningful errors, they are sent as response as is
 func processOption(optStr string) (kritiimages.TransformationOption, string, error) {
 	parts := strings.Split(optStr, "=")
 	if len(parts) != 2 {

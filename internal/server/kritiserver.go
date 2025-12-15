@@ -87,9 +87,8 @@ func getImageSources(ctx context.Context, cfg *config.ImagesConfig) map[string]k
 	sources := make(map[string]kritiimages.ImageSource, 0)
 	switch cfg.Source {
 	case "awss3":
-		// TODO: handle errors
-		s3Client, _ := getS3Client(ctx)
-		sources["awss3"], _ = kritiimages.NewImageSourceS3(ctx, cfg.AwsS3.Bucket, s3Client, &validations)
+		s3Client := getS3Client(ctx)
+		sources["awss3"] = kritiimages.NewImageSourceS3(ctx, cfg.AwsS3.Bucket, s3Client, &validations)
 	case "local":
 		sources["local"] = kritiimages.NewImageSourceLocal(cfg.Local.BasePath, &validations)
 	}
@@ -99,11 +98,11 @@ func getImageSources(ctx context.Context, cfg *config.ImagesConfig) map[string]k
 	return sources
 }
 
-func getS3Client(ctx context.Context) (*s3.Client, error) {
+func getS3Client(ctx context.Context) *s3.Client {
 	cfg, err := awsconfig.LoadDefaultConfig(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load AWS config: %w", err)
+		panic(fmt.Sprintf("failed to get s3 client instance; %s", err.Error()))
 	}
 
-	return s3.NewFromConfig(cfg), nil
+	return s3.NewFromConfig(cfg)
 }

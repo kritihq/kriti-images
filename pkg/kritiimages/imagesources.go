@@ -24,6 +24,10 @@ type ImageSource interface {
 	//
 	// In case of any error or no image found, `error` is returned and other
 	// return values are null and empty.
+	//
+	// Not all ImageSources support upload, e.g. URL based ImageSource which pulls images from any HTTP(s) URL.
+	//
+	// NOTE: method is experimental and may be removed in future.
 	UploadImage(ctx context.Context, fileName string, file image.Image) error
 }
 
@@ -40,10 +44,10 @@ func NewImageSourceURL(validations *imagesources.SourceImageValidations) *images
 	}
 }
 
-func NewImageSourceS3(ctx context.Context, bucket string, client *s3.Client, validations *imagesources.SourceImageValidations) (*imagesources.ImageSourceS3, error) {
+func NewImageSourceS3(ctx context.Context, bucket string, client *s3.Client, validations *imagesources.SourceImageValidations) *imagesources.ImageSourceS3 {
 	return &imagesources.ImageSourceS3{
 		SourceImageValidations: *validations,
 		Bucket:                 bucket,
 		Client:                 client,
-	}, nil
+	}
 }
