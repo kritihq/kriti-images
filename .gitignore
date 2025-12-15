@@ -1,5 +1,11 @@
 kriti-images
 node_modules
+
+# ignore images
 *.png
+*.jpg
+*.jpeg
+*.webp
+
 *.json
 *.js
