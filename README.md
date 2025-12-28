@@ -4,6 +4,10 @@ A high-performance image transformation service built in Go, providing a URL-bas
 
 **[Website](https://kritiimages.com) | [Demo](https://kritiimages.com/docs/transformations)**
 
+### Celebrating 150+ stars. Thank You!
+
+![Star History Chart](https://api.star-history.com/svg?repos=kritihq/kriti-images&type=date&legend=bottom-right)
+
 ## 🚀 Features
 
 - **URL-based transformations** - Transform images through simple URL parameters
