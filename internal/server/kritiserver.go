@@ -28,6 +28,7 @@ func ConfigureAndGet(ctx context.Context, cfg *config.Config) (*fiber.App, *krit
 	service := kritiimages.New(sources, sources[cfg.Images.Source])
 
 	routes.BindRouteTransformation(server, service)
+	routes.BindRouteTemplate(server, service)
 
 	// NOTE: do we need upload feature?
 	// It will need auth layer to be prod ready
