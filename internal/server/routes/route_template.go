@@ -1,17 +1,14 @@
 package routes
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/kritihq/kriti-images/internal/template"
 	"github.com/kritihq/kriti-images/pkg/kritiimages"
 )
 
@@ -29,15 +26,10 @@ func BindRouteTemplate(server *fiber.App, k *kritiimages.KritiImages) {
 			return c.Status(http.StatusBadRequest).SendString("template name parameter is required")
 		}
 
-		// TODO: handle errors
-		templateJSON, err := fetchTemplate(templateName)
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).SendString("failed to fetch template")
-		}
-		var vars map[string]string
+		vars := getVars(optionsStr)
 
 		// TODO: handle errors
-		buffer, err := template.RenderTemplate(templateJSON, vars)
+		buffer, err := k.RenderTemplate(c.Context(), templateName, vars)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -85,18 +77,7 @@ func BindRouteTemplate(server *fiber.App, k *kritiimages.KritiImages) {
 	})
 }
 
-func fetchTemplate(fileName string) (string, error) {
-	templatePath := "templates/json/" + fileName + ".json"
-
-	data, err := os.ReadFile(templatePath)
-	if err != nil {
-		return "", errors.New("template file not found")
-	}
-
-	var jsonCheck any
-	if err := json.Unmarshal(data, &jsonCheck); err != nil {
-		return "", errors.New("invalid JSON in template file")
-	}
-
-	return string(data), nil
+func getVars(optionsStr string) map[string]string {
+	// TODO: implement me
+	return make(map[string]string, 0)
 }

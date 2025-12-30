@@ -1,65 +1,34 @@
-package template
+package kritiimages
 
 import (
 	"bytes"
-	"encoding/json"
+	"context"
+	"errors"
 	"fmt"
 	"image"
 	"image/png"
 	"os"
 	"path/filepath"
-	"regexp"
-	"strings"
 
 	"github.com/fogleman/gg"
+	"github.com/kritihq/kriti-images/pkg/kritiimages/models"
 )
 
 // TODO: fetch from configs
 const fontPath = "/usr/share/fonts/arial/ARIAL.TTF"
 
-// Structs for parsing the JSON template
-type Node struct {
-	ClassName string `json:"className"`
-	Attrs     Attrs  `json:"attrs"`
-	Children  []Node `json:"children,omitempty"`
-}
+var (
+	ErrSourceTemplateNotFound = errors.New("source template not found")
+	ErrTemplateNotFound       = errors.New("failed to get template")
+	ErrTemplateRenderFailed   = errors.New("failed to render template")
+	ErInvalidTemplateSources  = errors.New("invalid templatesource instance provided")
+)
 
-type Attrs struct {
-	Width  int     `json:"width"`
-	Height int     `json:"height"`
-	X      float64 `json:"x"`
-	Y      float64 `json:"y"`
-	ScaleX float64 `json:"scaleX"`
-	ScaleY float64 `json:"scaleY"`
-
-	// text
-	FontSize float64 `json:"fontSize"`
-	Text     string  `json:"text"`
-	Fill     string  `json:"fill"` // hex color code
-
-	// image
-	Path string `json:"path"`
-}
-
-func substituteVariables(template string, variables map[string]string) string {
-	re := regexp.MustCompile(`\{\{(\w+)\}\}`)
-	return re.ReplaceAllStringFunc(template, func(match string) string {
-		key := strings.Trim(match, "{} ")
-		if val, ok := variables[key]; ok {
-			return val
-		}
-		return match
-	})
-}
-
-func RenderTemplate(templateJSON string, variables map[string]string) (*bytes.Buffer, error) {
-	// Substitute variables
-	substituted := substituteVariables(templateJSON, variables)
-
-	// Parse JSON
-	var root Node
-	if err := json.Unmarshal([]byte(substituted), &root); err != nil {
-		return nil, fmt.Errorf("failed to parse template JSON: %w", err)
+// RenderTemplate renders a template into an image.
+func (k *KritiImages) RenderTemplate(ctx context.Context, templateName string, vars map[string]string) (*bytes.Buffer, error) {
+	root, err := k.DefaultTemplateSources.GetTemplateSubstituted(ctx, templateName, vars)
+	if err != nil {
+		return nil, errors.Join(ErrTemplateRenderFailed, err)
 	}
 
 	// Canvas setup
@@ -94,11 +63,11 @@ func RenderTemplate(templateJSON string, variables map[string]string) (*bytes.Bu
 	return buf, nil
 }
 
-func renderNode(dc *gg.Context, node Node) error {
+func renderNode(dc *gg.Context, node *models.Node) error {
 	switch node.ClassName {
 	default: // ignore anything else, focus on child nodes
 		for _, child := range node.Children {
-			if err := renderNode(dc, child); err != nil {
+			if err := renderNode(dc, &child); err != nil {
 				return err
 			}
 		}
@@ -110,7 +79,7 @@ func renderNode(dc *gg.Context, node Node) error {
 	return nil
 }
 
-func renderImageNode(dc *gg.Context, attrs *Attrs) error {
+func renderImageNode(dc *gg.Context, attrs *models.Attrs) error {
 	path := attrs.Path
 	x := attrs.X
 	y := attrs.Y
@@ -144,7 +113,7 @@ func renderImageNode(dc *gg.Context, attrs *Attrs) error {
 	return nil
 }
 
-func renderTextNode(dc *gg.Context, attrs *Attrs) error {
+func renderTextNode(dc *gg.Context, attrs *models.Attrs) error {
 	text := attrs.Text
 	x := attrs.X
 	y := attrs.Y

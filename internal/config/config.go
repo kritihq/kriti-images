@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Server       ServerConfig       `mapstructure:"server"`
 	Images       ImagesConfig       `mapstructure:"images"`
+	Templates    TemplatesConfig    `mapstructure:"templates"`
 	Experimental ExperimentalConfig `mapstructure:"experimental"`
 }
 
@@ -47,6 +48,13 @@ type ImagesConfigAWSS3 struct {
 
 type ImagesConfigLocal struct {
 	BasePath string `mapstructure:"base_path"`
+}
+
+// TemplatesConfig holds templates-specific configuration
+type TemplatesConfig struct {
+	Source string            `mapstructure:"source"`
+	AwsS3  ImagesConfigAWSS3 `mapstructure:"awss3"`
+	Local  ImagesConfigLocal `mapstructure:"local"`
 }
 
 // LimiterConfig holds rate limiter configuration
@@ -98,6 +106,10 @@ func setDefaults() {
 	// Images defaults
 	viper.SetDefault("images.source", "local")
 	viper.SetDefault("images.local.base_path", "")
+
+	// Templates defaults
+	viper.SetDefault("templates.source", "local")
+	viper.SetDefault("templates.local.base_path", "")
 
 	viper.SetDefault("images.max_dimension", 8192)                  // 8K
 	viper.SetDefault("images.max_file_size_in_bytes", 50*1024*1024) // 50MB
