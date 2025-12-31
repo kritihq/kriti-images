@@ -11,9 +11,6 @@ import (
 	"github.com/kritihq/kriti-images/pkg/kritiimages/models"
 )
 
-// TODO: fetch from configs
-const fontPath = "/usr/share/fonts/arial/ARIAL.TTF"
-
 var (
 	ErrSourceTemplateNotFound = errors.New("source template not found")
 	ErrTemplateNotFound       = errors.New("failed to get template")
@@ -135,7 +132,7 @@ func (k *KritiImages) renderTextNode(dc *gg.Context, attrs *models.Attrs) error 
 	}
 
 	dc.Push()
-	if err := dc.LoadFontFace(fontPath, fontSize); err != nil {
+	if err := dc.LoadFontFace(k.DefaultFontPath, fontSize); err != nil {
 		return fmt.Errorf("failed to load font: %w", err)
 	}
 	dc.SetHexColor(fill)

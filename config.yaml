@@ -28,5 +28,7 @@ templates:
   local:
     base_path: ""
 
+  default_font_path: "" # path to default font
+
 experimental:
   enable_upload_api: false

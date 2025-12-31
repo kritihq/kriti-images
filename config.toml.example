@@ -27,6 +27,7 @@ base_path = ""
 
 [templates]
 source="local"
+default_font_path=""
 
 [templates.awss3]
 bucket=""

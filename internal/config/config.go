@@ -55,6 +55,8 @@ type TemplatesConfig struct {
 	Source string            `mapstructure:"source"`
 	AwsS3  ImagesConfigAWSS3 `mapstructure:"awss3"`
 	Local  ImagesConfigLocal `mapstructure:"local"`
+
+	DefaultFontPath string `mapstructure:"default_font_path"`
 }
 
 // LimiterConfig holds rate limiter configuration
@@ -112,6 +114,7 @@ func setDefaults() {
 	// Templates defaults
 	viper.SetDefault("templates.source", "local")
 	viper.SetDefault("templates.local.base_path", "")
+	viper.SetDefault("templates.default_font_path", "")
 
 	// Rate limiter defaults
 	viper.SetDefault("server.limiter.max", 100)

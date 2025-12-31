@@ -191,6 +191,7 @@ Create a `config.yaml` or `config.toml` file in the project root.
 - **templates.source** - Network source, `local` or `awss3` (default: local)
 - **templates.local.base_path** - Template source directory (default: "")
 - **templates.aws.s3.bucket** - AWS S3 bucket name (default: "")
+- **templates.default_font_path** - Path to default font on the local machine (default: "")
 - **server.limiter.max** - Rate limit per minute (default: 100)
 - **server.limiter.expiration** - Rate limit window (default: 1m)
 - **experimental.enable_upload_api** - Enable/disable upload APIs (POST/PUT /api/v0/images) (default: false)

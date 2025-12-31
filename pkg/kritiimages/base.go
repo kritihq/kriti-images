@@ -25,7 +25,7 @@ type DestinationImage struct {
 // It requires a map of ImageSource instances and a default ImageSource instance along with default TemplateSource instance.
 //
 // Program will panic if the provided map of ImageSource instances is empty or if the default ImageSource instance is nil.
-func New(sources map[string]ImageSource, defaultSrc ImageSource, templSource TemplateSource) *KritiImages {
+func New(sources map[string]ImageSource, defaultSrc ImageSource, templSource TemplateSource, defaultFontPath string) *KritiImages {
 	if len(sources) == 0 {
 		panic("no imagesources provided")
 	} else if defaultSrc == nil {
@@ -40,6 +40,7 @@ func New(sources map[string]ImageSource, defaultSrc ImageSource, templSource Tem
 		DefaultImageSource:     defaultSrc,
 		ImageSources:           sources,
 		DefaultTemplateSources: templSource,
+		DefaultFontPath:        defaultFontPath,
 	}
 }
 
@@ -49,6 +50,7 @@ type KritiImages struct {
 	DefaultImageSource     ImageSource
 	ImageSources           map[string]ImageSource
 	DefaultTemplateSources TemplateSource
+	DefaultFontPath        string
 }
 
 // refer to base_transform & base_template files

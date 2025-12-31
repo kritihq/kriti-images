@@ -26,7 +26,7 @@ func ConfigureAndGet(ctx context.Context, cfg *config.Config) (*fiber.App, *krit
 
 	imageSources := getImageSources(ctx, &cfg.Images)
 	templSources := getTemplateSources(ctx, &cfg.Templates)
-	service := kritiimages.New(imageSources, imageSources[cfg.Images.Source], templSources)
+	service := kritiimages.New(imageSources, imageSources[cfg.Images.Source], templSources, cfg.Templates.DefaultFontPath)
 
 	routes.BindRouteTransformation(server, service)
 	routes.BindRouteTemplate(server, service)
