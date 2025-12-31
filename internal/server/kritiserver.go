@@ -24,10 +24,12 @@ import (
 func ConfigureAndGet(ctx context.Context, cfg *config.Config) (*fiber.App, *kritiimages.KritiImages) {
 	server := initFiberApp(cfg)
 
-	sources := getImageSources(ctx, &cfg.Images)
-	service := kritiimages.New(sources, sources[cfg.Images.Source])
+	imageSources := getImageSources(ctx, &cfg.Images)
+	templSources := getTemplateSources(ctx, &cfg.Templates)
+	service := kritiimages.New(imageSources, imageSources[cfg.Images.Source], templSources, cfg.Templates.DefaultFontPath)
 
 	routes.BindRouteTransformation(server, service)
+	routes.BindRouteTemplate(server, service)
 
 	// NOTE: do we need upload feature?
 	// It will need auth layer to be prod ready
@@ -96,6 +98,19 @@ func getImageSources(ctx context.Context, cfg *config.ImagesConfig) map[string]k
 	// always present, for now
 	sources["http"] = kritiimages.NewImageSourceURL(&validations)
 	return sources
+}
+
+func getTemplateSources(ctx context.Context, cfg *config.TemplatesConfig) kritiimages.TemplateSource {
+	switch cfg.Source {
+	case "awss3":
+		s3Client := getS3Client(ctx)
+		return kritiimages.NewTemplateSourceS3(ctx, cfg.AwsS3.Bucket, s3Client)
+	case "local":
+		return kritiimages.NewTemplateSourceLocal(cfg.Local.BasePath)
+	}
+
+	// fallback
+	return kritiimages.NewTemplateSourceLocal("")
 }
 
 func getS3Client(ctx context.Context) *s3.Client {
