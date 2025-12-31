@@ -5,10 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"image"
 	"image/png"
-	"os"
-	"path/filepath"
 
 	"github.com/fogleman/gg"
 	"github.com/kritihq/kriti-images/pkg/kritiimages/models"
@@ -25,6 +22,12 @@ var (
 )
 
 // RenderTemplate renders a template into an image.
+//
+// Accepts context.Context for cancellation and timeout.
+// Accepts template name.
+// Accepts map of variables to substitute in the template.
+//
+// Returns the rendered image as a buffer.
 func (k *KritiImages) RenderTemplate(ctx context.Context, templateName string, vars map[string]string) (*bytes.Buffer, error) {
 	root, err := k.DefaultTemplateSources.GetTemplateSubstituted(ctx, templateName, vars)
 	if err != nil {
@@ -50,7 +53,7 @@ func (k *KritiImages) RenderTemplate(ctx context.Context, templateName string, v
 	dc.Pop()
 
 	// Render recursively
-	if err := renderNode(dc, root); err != nil {
+	if err := k.renderNode(ctx, dc, root); err != nil {
 		return nil, err
 	}
 
@@ -63,24 +66,33 @@ func (k *KritiImages) RenderTemplate(ctx context.Context, templateName string, v
 	return buf, nil
 }
 
-func renderNode(dc *gg.Context, node *models.Node) error {
+func (k *KritiImages) renderNode(ctx context.Context, dc *gg.Context, node *models.Node) error {
 	switch node.ClassName {
 	default: // ignore anything else, focus on child nodes
 		for _, child := range node.Children {
-			if err := renderNode(dc, &child); err != nil {
+			if err := k.renderNode(ctx, dc, &child); err != nil {
 				return err
 			}
 		}
 	case "Image":
-		return renderImageNode(dc, &node.Attrs)
+		return k.renderImageNode(ctx, dc, &node.Attrs)
 	case "Text":
-		return renderTextNode(dc, &node.Attrs)
+		return k.renderTextNode(dc, &node.Attrs)
 	}
 	return nil
 }
 
-func renderImageNode(dc *gg.Context, attrs *models.Attrs) error {
+func (k *KritiImages) renderImageNode(ctx context.Context, dc *gg.Context, attrs *models.Attrs) error {
 	path := attrs.Path
+	if path == "" {
+		return nil
+	}
+	source := k.getImageSource(path)
+	img, _, err := source.GetImage(ctx, path)
+	if err != nil {
+		return ErrSourceImageNotFound
+	}
+
 	x := attrs.X
 	y := attrs.Y
 	scaleX := attrs.ScaleX
@@ -92,19 +104,6 @@ func renderImageNode(dc *gg.Context, attrs *models.Attrs) error {
 		scaleY = 1
 	}
 
-	if path == "" {
-		return nil
-	}
-	imgFile, err := os.Open(filepath.Clean(path))
-	if err != nil {
-		return fmt.Errorf("failed to open image %s: %w", path, err)
-	}
-	defer imgFile.Close()
-	img, _, err := image.Decode(imgFile)
-	if err != nil {
-		return fmt.Errorf("failed to decode image %s: %w", path, err)
-	}
-
 	dc.Push()
 	dc.Translate(x, y)
 	dc.Scale(scaleX, scaleY)
@@ -113,7 +112,7 @@ func renderImageNode(dc *gg.Context, attrs *models.Attrs) error {
 	return nil
 }
 
-func renderTextNode(dc *gg.Context, attrs *models.Attrs) error {
+func (k *KritiImages) renderTextNode(dc *gg.Context, attrs *models.Attrs) error {
 	text := attrs.Text
 	x := attrs.X
 	y := attrs.Y

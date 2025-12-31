@@ -15,8 +15,6 @@ import (
 )
 
 var (
-	ErrSourceImageNotFound     = errors.New("source image not found")
-	ErInvalidImageSources      = errors.New("invalid imagesource instance provided")
 	ErrTransformationsNotFound = errors.New("failed to get transformations")
 )
 

@@ -8,6 +8,8 @@ import (
 var (
 	ErrInvalidImageFormat  = errors.New("unsupported image format")
 	ErrFailedToEncodeImage = errors.New("failed to encode image to provided format")
+	ErrSourceImageNotFound = errors.New("source image not found")
+	ErInvalidImageSources  = errors.New("invalid imagesource instance provided")
 )
 
 // DestinationImage represents the desired output image properties.
