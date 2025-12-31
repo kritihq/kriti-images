@@ -32,7 +32,7 @@ func (k *KritiImages) RenderTemplate(ctx context.Context, templateName string, v
 	}
 
 	// Canvas setup
-	width, height := root.Attrs.Width, root.Attrs.Width
+	width, height := root.Attrs.Width, root.Attrs.Height
 	if width <= 0 || height <= 0 || width > 2048 || height > 2048 {
 		return nil, fmt.Errorf("invalid canvas size")
 	}
