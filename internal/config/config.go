@@ -106,13 +106,12 @@ func setDefaults() {
 	// Images defaults
 	viper.SetDefault("images.source", "local")
 	viper.SetDefault("images.local.base_path", "")
+	viper.SetDefault("images.max_dimension", 8192)                  // 8K
+	viper.SetDefault("images.max_file_size_in_bytes", 50*1024*1024) // 50MB
 
 	// Templates defaults
 	viper.SetDefault("templates.source", "local")
 	viper.SetDefault("templates.local.base_path", "")
-
-	viper.SetDefault("images.max_dimension", 8192)                  // 8K
-	viper.SetDefault("images.max_file_size_in_bytes", 50*1024*1024) // 50MB
 
 	// Rate limiter defaults
 	viper.SetDefault("server.limiter.max", 100)

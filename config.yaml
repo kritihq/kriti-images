@@ -21,5 +21,12 @@ images:
   local:
     base_path: ""
 
+templates:
+  source: "local" # allowed values awss3, local
+  awss3:
+    bucket: ""
+  local:
+    base_path: ""
+
 experimental:
   enable_upload_api: false

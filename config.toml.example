@@ -25,5 +25,14 @@ bucket=""
 [images.local]
 base_path = ""
 
+[templates]
+source="local"
+
+[templates.awss3]
+bucket=""
+
+[templates.local]
+base_path = ""
+
 [experimental]
 enable_upload_api = false
