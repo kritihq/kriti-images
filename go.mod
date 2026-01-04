@@ -8,6 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.90.2
 	github.com/chai2010/webp v1.4.0
 	github.com/disintegration/gift v1.2.1
+	github.com/disintegration/imaging v1.6.2
 	github.com/fogleman/gg v1.3.0
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/spf13/viper v1.21.0

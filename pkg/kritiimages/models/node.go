@@ -8,12 +8,17 @@ type Node struct {
 }
 
 type Attrs struct {
-	Width  int     `json:"width"`
-	Height int     `json:"height"`
-	X      float64 `json:"x"`
-	Y      float64 `json:"y"`
-	ScaleX float64 `json:"scaleX"`
-	ScaleY float64 `json:"scaleY"`
+	Width        int     `json:"width"`
+	Height       int     `json:"height"`
+	X            float64 `json:"x"`
+	Y            float64 `json:"y"`
+	ScaleX       float64 `json:"scaleX"`
+	ScaleY       float64 `json:"scaleY"`
+	Rotation     float64 `json:"rotation"`
+	BlurRadius   float64 `json:"blur_radius"`
+	Brightness   float64 `json:"brightness"`    // 0 = no change, positive/negative for adjustment
+	Contrast     float64 `json:"contrast"`      // 0 = no change, positive/negative for adjustment
+	BorderRadius float64 `json:"border_radius"` // in pixels
 
 	// text
 	FontSize float64 `json:"fontSize"`

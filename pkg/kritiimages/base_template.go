@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image/png"
 
+	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
 	"github.com/kritihq/kriti-images/pkg/kritiimages/models"
 )
@@ -90,6 +91,16 @@ func (k *KritiImages) renderImageNode(ctx context.Context, dc *gg.Context, attrs
 		return ErrSourceImageNotFound
 	}
 
+	if attrs.BlurRadius > 0 {
+		img = imaging.Blur(img, attrs.BlurRadius)
+	}
+	if attrs.Brightness != 0 {
+		img = imaging.AdjustBrightness(img, attrs.Brightness)
+	}
+	if attrs.Contrast != 0 {
+		img = imaging.AdjustContrast(img, attrs.Contrast)
+	}
+
 	x := attrs.X
 	y := attrs.Y
 	scaleX := attrs.ScaleX
@@ -100,10 +111,19 @@ func (k *KritiImages) renderImageNode(ctx context.Context, dc *gg.Context, attrs
 	if scaleY == 0 {
 		scaleY = 1
 	}
+	width := img.Bounds().Size().X
+	height := img.Bounds().Size().Y
 
 	dc.Push()
 	dc.Translate(x, y)
 	dc.Scale(scaleX, scaleY)
+	dc.Rotate(attrs.Rotation)
+
+	if attrs.BorderRadius > 0 {
+		dc.DrawRoundedRectangle(0, 0, float64(width), float64(height), attrs.BorderRadius)
+		dc.Clip()
+	}
+
 	dc.DrawImage(img, 0, 0)
 	dc.Pop()
 	return nil
@@ -137,6 +157,7 @@ func (k *KritiImages) renderTextNode(dc *gg.Context, attrs *models.Attrs) error 
 	}
 	dc.SetHexColor(fill)
 	dc.Scale(scaleX, scaleY)
+	dc.Rotate(attrs.Rotation)
 	dc.DrawStringAnchored(text, x, y, 0, 1.1)
 	dc.Pop()
 	return nil
