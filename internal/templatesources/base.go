@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -45,7 +44,7 @@ func (i *TemplateSourceLocal) GetTemplateSubstituted(ctx context.Context, fileNa
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		return nil, errors.New("template file not found")
+		return nil, fmt.Errorf("template file not found: %w", err)
 	}
 
 	return substituteVarsAndUnmarshalToRootNode(data, vars)
@@ -54,12 +53,12 @@ func (i *TemplateSourceLocal) GetTemplateSubstituted(ctx context.Context, fileNa
 func substituteVarsAndUnmarshalToRootNode(data []byte, vars map[string]string) (*models.Node, error) {
 	tmpl, err := template.New("templateJSON").Parse(string(data))
 	if err != nil {
-		return nil, errors.New("invalid JSON in template file")
+		return nil, fmt.Errorf("invalid JSON in template file: %w", err)
 	}
 
 	var buf bytes.Buffer
 	if err = tmpl.Execute(&buf, vars); err != nil {
-		return nil, errors.New("failed to execute template")
+		return nil, fmt.Errorf("failed to execute template: %w", err)
 	}
 
 	return unmarshalToRootNode([]byte(buf.Bytes()))
