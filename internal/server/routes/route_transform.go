@@ -16,12 +16,12 @@ import (
 )
 
 func BindRouteTransformation(server *fiber.App, k *kritiimages.KritiImages) {
-	server.Get(`/cgi/images/tr\::options?/:image`, func(c *fiber.Ctx) error {
+	server.Get(`/cgi/images/tr\::options?/*`, func(c *fiber.Ctx) error {
 		optionsStr := c.Params("options", "")
-		imagePath, err := url.PathUnescape(c.Params("image", ""))
+		imagePath, err := url.PathUnescape(c.Params("*", ""))
 		if err != nil {
 			log.Warn("failed to unescape image path, using original value", "path", imagePath)
-			imagePath = c.Params("image", "")
+			imagePath = c.Params("*", "")
 		}
 		log.Infow("new request", "options", optionsStr, "path", imagePath)
 
