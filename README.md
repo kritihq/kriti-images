@@ -32,6 +32,9 @@ GET /cgi/images/tr:quality=100/image1.jpg
 # Resize to 300px width, auto height
 GET /cgi/images/tr:width=300/image1.jpg
 
+# Subdirectory path
+GET /cgi/images/tr:width=300,fit=contain/garden/flower.png
+
 # Resize with specific fit mode and background
 GET /cgi/images/tr:width=400,height=300,fit=pad,background=blue/image1.jpg
 
@@ -153,7 +156,7 @@ curl -X PUT http://localhost:8080/api/v0/images \
    - API: `http://localhost:8080/cgi/images/tr:<transformations>/<image-name>`
    - Demo page: `http://localhost:8080/demo`
 
-   > Always URL escape <image-name> path
+   > URL escape `<image-name>` when it contains reserved URL characters (for example `?` or `#`)
 
 ### Production Build
 
